@@ -1,5 +1,4 @@
 import React, {CSSProperties, useEffect, useRef} from "react";
-// @ts-ignore
 import scrollReveal from "scrollreveal";
 
 interface ScrollRevealProps {

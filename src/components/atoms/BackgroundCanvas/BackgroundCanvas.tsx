@@ -1,7 +1,6 @@
 import {css, SerializedStyles} from "@emotion/react";
-// import Image from "next/image";
-// import {useEffect} from "react";
-// import * as THREE from 'three'
+import {useLayoutEffect, useRef} from "react";
+import Sketch from './sketch';
 
 interface BackgroundCanvasProps {
   style: SerializedStyles
@@ -13,79 +12,39 @@ const Canvas = css`
 `
 
 const BackgroundCanvas = (prop: BackgroundCanvasProps) => {
-  // let canvas: HTMLElement
   // useEffect(() => {
-  //   if (canvas) return
-  //   // canvasを取得
-  //   canvas = document.getElementById('canvas')!
-  //
-  //   // シーン
-  //   const scene = new THREE.Scene()
-  //
-  //   // サイズ
-  //   const sizes = {
-  //     width: innerWidth,
-  //     height: innerHeight
-  //   }
-  //
-  //   // カメラ
-  //   const camera = new THREE.PerspectiveCamera(
-  //     75,
-  //     sizes.width / sizes.height,
-  //     0.1,
-  //     1000
-  //   )
-  //
-  //   // レンダラー
-  //   const renderer = new THREE.WebGLRenderer({
-  //     canvas: canvas || undefined,
-  //     antialias: true,
-  //     alpha: true
-  //   })
-  //   renderer.setSize(sizes.width, sizes.height)
-  //   renderer.setPixelRatio(window.devicePixelRatio)
-  //
-  //   // ボックスジオメトリー
-  //   const boxGeometry = new THREE.BoxGeometry(1, 1, 1)
-  //   const boxMaterial = new THREE.MeshLambertMaterial({
-  //     color: '#2497f0'
-  //   })
-  //   const box = new THREE.Mesh(boxGeometry, boxMaterial)
-  //   box.position.z = -5
-  //   box.rotation.set(10, 10, 10)
-  //   scene.add(box)
-  //
-  //   // ライト
-  //   const ambientLight = new THREE.AmbientLight(0xffffff, 0.7)
-  //   scene.add(ambientLight)
-  //   const pointLight = new THREE.PointLight(0xffffff, 0.2)
-  //   pointLight.position.set(1, 2, 3)
-  //   scene.add(pointLight)
-  //
-  //   // アニメーション
-  //   const clock = new THREE.Clock()
-  //   const tick = () => {
-  //     const elapsedTime = clock.getElapsedTime()
-  //     box.rotation.x = elapsedTime
-  //     box.rotation.y = elapsedTime
-  //     window.requestAnimationFrame(tick)
-  //     renderer.render(scene, camera)
-  //   }
-  //   tick()
-  //
-  //   // ブラウザのリサイズ処理
-  //   window.addEventListener('resize', () => {
-  //     sizes.width = window.innerWidth
-  //     sizes.height = window.innerHeight
-  //     camera.aspect = sizes.width / sizes.height
-  //     camera.updateProjectionMatrix()
-  //     renderer.setSize(sizes.width, sizes.height)
-  //     renderer.setPixelRatio(window.devicePixelRatio)
-  //   })
+  //   const layout = new Layout(document.getElementById('canvas')! as HTMLCanvasElement);
+  //   layout.start()
   // }, [])
+
+  const mountRef = useRef<HTMLDivElement>(null)
+  const imgRef = useRef<HTMLImageElement>(null)
+
+  useLayoutEffect(() => {
+    const elm = mountRef.current
+    const img = imgRef.current
+
+    if (!elm || !img) return
+
+    const sketch = new Sketch({
+      dom: elm,
+      img: img,
+    })
+    return () => {
+      elm?.removeChild(sketch.renderer.domElement)
+    }
+  }, [])
+
+
   return (
     <div css={[prop.style]}>
-      <canvas id='canvas' css={Canvas}/>
+      <div ref={mountRef}
+           id='canvas'
+           css={Canvas}
+           data-grid="90"
+           data-mouse="0.02"
+           data-strength="0.0"/>
+      <img ref={imgRef} src="/img/main.png" alt=""/>
     </div>
   )
 }
