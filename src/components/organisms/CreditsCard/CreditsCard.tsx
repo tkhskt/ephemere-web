@@ -5,7 +5,7 @@ import {Adobe} from "styles/font";
 import {credits} from "values";
 import {useHover} from "hooks/hover";
 import {HoveredElement, useMouseStalkerContext} from "contexts/MouseStalkerContext/context";
-import {memo, useEffect} from "react";
+import {memo, useCallback, useEffect, useLayoutEffect} from "react";
 import CreditListItem from "components/molecules/CreditListItem";
 
 const Card = css`
@@ -37,46 +37,18 @@ const TableWrapper = css`
   line-height: 2.75em;
 `
 
-const CreditsName = css`
-  padding-left: ${clw(20)};
-`
-
-const Link = css`
-  font-size: ${font(12)};
-`
-
-const LinkWrapper = css`
-  display: inline;
-`
-
-const LinkStroke = css`
-  position: absolute;
-  width: 0;
-  height: 1px;
-  left: 0;
-  bottom: 0;
-  background: ${Colors.White};
-  transition: width 0.2s ease;
-`
-
-const LinkStrokeHover = css`
-  width: 100%;
-  transition: width 0.2s ease;
-`
-
 const CreditsCard = memo(() => {
-
-  const [linkHoverRef, isHoverLink] = useHover()
 
   const {setIsHoverOn} = useMouseStalkerContext()
 
-  useEffect(() => {
-    if (isHoverLink) {
+  const onHover = useCallback((isHover: boolean) => {
+    if(isHover) {
       setIsHoverOn(HoveredElement.Link)
     } else {
       setIsHoverOn(HoveredElement.Others)
     }
-  }, [linkHoverRef, isHoverLink])
+  }, [])
+
 
   return (
     <div css={Card}>
@@ -91,7 +63,7 @@ const CreditsCard = memo(() => {
           <tbody>
           {credits.map((credits, index) => (
             <CreditListItem name={credits.name} role={credits.role} url={credits.url} linkText={credits.linkText}
-                            key={index}/>
+                            key={index} onHoverLink={onHover}/>
           ))}
           </tbody>
         </table>

@@ -3,7 +3,7 @@ import {Colors} from "styles/theme";
 import {clw, font} from "util/size";
 import {useHover} from "hooks/hover";
 import {HoveredElement, useMouseStalkerContext} from "contexts/MouseStalkerContext/context";
-import {memo, useLayoutEffect} from "react";
+import {memo, useEffect, useLayoutEffect} from "react";
 
 const CreditsName = css`
   padding-left: ${clw(20)};
@@ -37,22 +37,17 @@ interface CreditListItemProps {
   role: string
   url?: string
   linkText?: string
+  onHoverLink: (isHoverLink: boolean) => void
 }
 
 const CreditListItem = memo((prop: CreditListItemProps) => {
 
-  const {name, role, url, linkText} = prop
+  const {name, role, url, linkText, onHoverLink} = prop
 
   const [linkHoverRef, isHoverLink] = useHover()
 
-  const {setIsHoverOn} = useMouseStalkerContext()
-
   useLayoutEffect(() => {
-    if (isHoverLink) {
-      setIsHoverOn(HoveredElement.Link)
-    } else {
-      setIsHoverOn(HoveredElement.Others)
-    }
+    onHoverLink(isHoverLink)
   }, [linkHoverRef, isHoverLink])
 
   return (
