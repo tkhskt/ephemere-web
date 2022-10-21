@@ -109,16 +109,16 @@ const TrackListItem = memo((prop: TrackListItemProps) => {
   return (
     <tr key={track.id} css={TrackItem}>
       <td css={TrackNumber}>{number}.</td>
-      <td ref={trackHoverRef} css={TrackName}>
+      <td css={TrackName}>
         <div css={css`
           display: flex;
           align-items: center;
           padding: .4em 0;
         `}>
-          <div><p onClick={() => onClickTrack(track)} css={[css`display: inline`, track.lyrics && Clickable]}>{track.name}</p>
+          <div><p ref={trackHoverRef} onClick={() => onClickTrack(track)} css={[css`display: inline`, track.lyrics && Clickable]}>{track.name}</p>
             {
               track.featuredArtist &&
-              <p css={css`display: inline`}><span onClick={() => onClickTrack(track)} css={track.lyrics && Clickable}> feat.</span>
+              <p css={css`display: inline`}><span onClick={() => onClickTrack(track)} css={track.lyrics && Clickable}> feat. </span>
                 <a css={FeaturedArtistLink} ref={featuredArtistRef} href={track.featuredArtist.url}
                    target='_blank'
                    rel="noreferrer">{track.featuredArtist.name}<span

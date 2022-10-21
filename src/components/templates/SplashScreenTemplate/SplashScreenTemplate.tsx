@@ -10,6 +10,7 @@ import {disableBodyScroll, enableBodyScroll} from "body-scroll-lock";
 import {clw, font} from "util/size";
 
 const Container = css`
+  padding-top: ${clw(140)};
   position: fixed;
   display: flex;
   flex-direction: column;

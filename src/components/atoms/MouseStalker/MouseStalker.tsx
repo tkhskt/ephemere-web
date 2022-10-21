@@ -71,6 +71,7 @@ const MouseStalker = memo(() => {
       gsap.context(() => {
         const hoveredElement = mouseStalkerState.hoveredElement
         gsap.killTweensOf(textRef.current)
+        gsap.killTweensOf(cursorRef.current)
         switch (hoveredElement) {
           case HoveredElement.Top:
             gsap.timeline()
