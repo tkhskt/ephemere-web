@@ -3,17 +3,16 @@ import {Colors} from "styles/theme";
 import {usePageContext} from "contexts/PageContext/context";
 import {ZIndex} from "values";
 import {Serif} from "styles/font";
-import {InView} from "react-intersection-observer";
-import TrackLinePc from "assets/svg/track_line_pc.svg";
-import {useLayoutEffect, useRef, useState} from "react";
+import {useLayoutEffect, useRef} from "react";
 import gsap from "gsap";
-import pages from "pages";
 import {useScrollLock} from "hooks/scrollLock";
 import {disableBodyScroll, enableBodyScroll} from "body-scroll-lock";
+import {clw, font} from "util/size";
 
 const Container = css`
   position: fixed;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   top: 0;
@@ -38,6 +37,22 @@ const Text = css`
   `} 2s ease forwards;
 `
 
+const LoadingText = css`
+  font-size: ${font(12)};
+  margin-top: ${clw(140)};
+  text-align: center;
+  user-select: none;
+  animation: ${keyframes`
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+
+    }
+  `} 2s ease forwards;
+`
+
 const SplashScreenTemplate = () => {
   const splashRef = useRef<HTMLDivElement>(null)
   const {pageState} = usePageContext()
@@ -47,6 +62,7 @@ const SplashScreenTemplate = () => {
     gsap.context(() => {
       const splash = splashRef.current
       if (splash == null) return
+      disableBodyScroll(splash);
       if (pageState.backgroundLoaded) {
         gsap.timeline()
           .to(splashRef.current, {
@@ -54,9 +70,6 @@ const SplashScreenTemplate = () => {
             duration: 0.5,
             css: {
               opacity: 0,
-            },
-            onStart() {
-              disableBodyScroll(splash);
             },
             onComplete() {
               enableBodyScroll(splash);
@@ -70,6 +83,7 @@ const SplashScreenTemplate = () => {
   return (
     <div ref={splashRef} css={[Container]}>
       <p css={Text}>Electronica will live forever.</p>
+      <p css={LoadingText}>loading...</p>
     </div>
   )
 }
