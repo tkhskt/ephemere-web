@@ -1,6 +1,8 @@
 import {css, SerializedStyles} from "@emotion/react";
 import {useLayoutEffect, useRef} from "react";
 import Sketch from './sketch';
+import Image from "next/image";
+import {usePageContext} from "contexts/PageContext/context";
 
 interface BackgroundCanvasProps {
   style: SerializedStyles
@@ -12,10 +14,6 @@ const Canvas = css`
 `
 
 const BackgroundCanvas = (prop: BackgroundCanvasProps) => {
-  // useEffect(() => {
-  //   const layout = new Layout(document.getElementById('canvas')! as HTMLCanvasElement);
-  //   layout.start()
-  // }, [])
 
   const mountRef = useRef<HTMLDivElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
@@ -26,6 +24,14 @@ const BackgroundCanvas = (prop: BackgroundCanvasProps) => {
 
     if (!elm || !img) return
 
+    if (img.complete) {
+      setIsBackgroundLoaded(true)
+    } else {
+      img.onload = () => {
+        setIsBackgroundLoaded(true)
+      }
+    }
+
     const sketch = new Sketch({
       dom: elm,
       img: img,
@@ -35,6 +41,7 @@ const BackgroundCanvas = (prop: BackgroundCanvasProps) => {
     }
   }, [])
 
+  const {setIsBackgroundLoaded} = usePageContext()
 
   return (
     <div css={[prop.style]}>

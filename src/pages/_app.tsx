@@ -9,6 +9,7 @@ import {LoadScript, Mincho} from "styles/font";
 import Head from "next/head";
 import {clw} from "util/size";
 import {MouseStalkerContextProvider} from "contexts/MouseStalkerContext";
+import {PageContextProvider} from "contexts/PageContext";
 
 function MyApp({Component, pageProps}: AppProps) {
   return (
@@ -37,7 +38,9 @@ function MyApp({Component, pageProps}: AppProps) {
       <MouseStalkerContextProvider>
         <ModalContextProvider>
           <TrackContextProvider>
-            <Component {...pageProps} />
+            <PageContextProvider>
+              <Component {...pageProps} />
+            </PageContextProvider>
           </TrackContextProvider>
         </ModalContextProvider>
       </MouseStalkerContextProvider>

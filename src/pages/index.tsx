@@ -1,6 +1,6 @@
 import type {NextPage} from 'next'
 import Head from 'next/head'
-import {IndexPageTemplate} from "components/templates";
+import {IndexPageTemplate, SplashScreenTemplate} from "components/templates";
 
 const Home: NextPage = () => {
   return (
@@ -12,6 +12,7 @@ const Home: NextPage = () => {
       </Head>
       <main>
         <IndexPageTemplate/>
+        <SplashScreenTemplate/>
       </main>
     </div>
   )
