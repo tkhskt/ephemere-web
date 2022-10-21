@@ -4,6 +4,8 @@ import {clw} from "util/size";
 import {useHover} from "hooks/hover";
 import {Colors} from "styles/theme";
 import {useModalContext} from "contexts/ModalContext/context";
+import {memo, useCallback, useEffect, useLayoutEffect} from "react";
+import {HoveredElement, useMouseStalkerContext} from "contexts/MouseStalkerContext/context";
 
 interface TrackListItemProps {
   number: number
@@ -71,6 +73,7 @@ const ArtistStroke = css`
   bottom: 0;
   background: ${Colors.White};
   transition: width 0.2s ease;
+  will-change: width;
 `
 
 const ArtistStrokeHover = css`
@@ -82,7 +85,7 @@ const Clickable = css`
   cursor: pointer;
 `
 
-const TrackListItem = (prop: TrackListItemProps) => {
+const TrackListItem = memo((prop: TrackListItemProps) => {
   const {number, track} = prop
 
   const {setIsOpened, setCurrentTrackId} = useModalContext()
@@ -93,12 +96,24 @@ const TrackListItem = (prop: TrackListItemProps) => {
 
   const [artistHoverRef, isHoverArtist] = useHover()
 
-  const onClickTrack = () => {
+  const {setIsHoverOn} = useMouseStalkerContext()
+
+  useLayoutEffect(() => {
+    if (isHover && !isHoverFeaturedArtist && track.lyrics) {
+      setIsHoverOn(HoveredElement.Track)
+    } else if (isHoverArtist || isHoverFeaturedArtist) {
+      setIsHoverOn(HoveredElement.Link)
+    } else {
+      setIsHoverOn(HoveredElement.Others)
+    }
+  }, [artistHoverRef, isHoverArtist, featuredArtistRef, isHoverFeaturedArtist, trackHoverRef, isHover])
+
+  const onClickTrack = useCallback(() => {
     if (track.lyrics) {
       setCurrentTrackId(track.id)
       setIsOpened(true)
     }
-  }
+  }, [])
 
   return (
     <tr key={track.id} css={TrackItem}>
@@ -112,10 +127,11 @@ const TrackListItem = (prop: TrackListItemProps) => {
           <div><p onClick={onClickTrack} css={[css`display: inline`, track.lyrics && Clickable]}>{track.name}</p>
             {
               track.featuredArtist &&
-              <p css={css`display: inline`}><span onClick={onClickTrack} css={track.lyrics && Clickable}> feat.</span> <a css={FeaturedArtistLink} ref={featuredArtistRef} href={track.featuredArtist.url}
-                              target='_blank'
-                              rel="noreferrer">{track.featuredArtist.name}<span
-                css={[ArtistStroke, isHoverFeaturedArtist && ArtistStrokeHover]}/></a></p>
+              <p css={css`display: inline`}><span onClick={onClickTrack} css={track.lyrics && Clickable}> feat.</span>
+                <a css={FeaturedArtistLink} ref={featuredArtistRef} href={track.featuredArtist.url}
+                   target='_blank'
+                   rel="noreferrer">{track.featuredArtist.name}<span
+                  css={[ArtistStroke, isHoverFeaturedArtist && ArtistStrokeHover]}/></a></p>
             }
           </div>
           <div onClick={onClickTrack} css={[StrokeContainer, track.lyrics && Clickable]}><span
@@ -128,6 +144,8 @@ const TrackListItem = (prop: TrackListItemProps) => {
         css={[ArtistStroke, isHoverArtist && ArtistStrokeHover]}/></a></td>
     </tr>
   )
-}
+})
+
+TrackListItem.displayName = "TrackListItem"
 
 export default TrackListItem

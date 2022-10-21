@@ -7,7 +7,8 @@ import {css, Global} from "@emotion/react";
 import {Colors} from "styles/theme";
 import {LoadScript, Mincho} from "styles/font";
 import Head from "next/head";
-import {clw} from "../util/size";
+import {clw} from "util/size";
+import {MouseStalkerContextProvider} from "contexts/MouseStalkerContext";
 
 function MyApp({Component, pageProps}: AppProps) {
   return (
@@ -24,16 +25,22 @@ function MyApp({Component, pageProps}: AppProps) {
             color: ${Colors.White};
             font-size: ${clw(16)};
             letter-spacing: 0.02em;
-            background: ${Colors.White};
+            background: ${Colors.Black};
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-font-smoothing: antialiased;
+            box-sizing: border-box;
             ${Mincho}
           }
         `}
       />
-      <ModalContextProvider>
-        <TrackContextProvider>
-          <Component {...pageProps} />
-        </TrackContextProvider>
-      </ModalContextProvider>
+      <MouseStalkerContextProvider>
+        <ModalContextProvider>
+          <TrackContextProvider>
+            <Component {...pageProps} />
+          </TrackContextProvider>
+        </ModalContextProvider>
+      </MouseStalkerContextProvider>
     </>
   )
 }

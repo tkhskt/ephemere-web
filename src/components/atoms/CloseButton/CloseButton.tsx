@@ -31,7 +31,7 @@ const Stroke = css`
   background: ${Colors.White};
   top: calc(50% - 1px);
 
-  &:first-child {
+  &:first-of-type {
     top: calc(100% - 2px);
     left: calc(50% + 1px);
 

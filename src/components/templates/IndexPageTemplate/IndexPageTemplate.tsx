@@ -4,11 +4,9 @@ import {SectionInfoCredits, SectionTop, SectionTracks} from "components/organism
 import {css} from "@emotion/react";
 import {Serif} from "styles/font";
 import {Colors} from "styles/theme";
-import {LyricsModalTemplate} from "components/templates/index";
-import {useModalContext} from "contexts/ModalContext/context";
-import {useTrackContext} from "contexts/TrackContext/context";
-import {Disc} from "components/templates/LyricsModalTemplate/LyricsModalTemplate";
-import {CSSTransition} from "react-transition-group";
+import MouseStalker from "components/atoms/MouseStalker/MouseStalker";
+import {memo, useRef} from "react";
+import LyricsModal from "components/organisms/LyricsModal";
 
 const IndexPage = css`
   width: 100%;
@@ -34,74 +32,29 @@ const LogoStyle = css`
   width: 296.83px;
 `
 
-const reactTransitionGroupWindow = css`
-  position: fixed;
-  z-index: 1500;
-  &.react-transition-group-enter {
-    opacity: 0;
-  }
-
-  &.react-transition-group-enter-active {
-    opacity: 1;
-    transition-duration: 300ms;
-    transition-property: opacity;
-    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-  }
-
-  &.react-transition-group-exit {
-    opacity: 1;
-  }
-
-  &.react-transition-group-exit-active {
-    opacity: 0;
-    transition-duration: 150ms;
-    transition-property: opacity;
-    transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
-  }
-`
-
-const LyricsModalStyle = css`
-
-`
-
 const Content = css`
   z-index: 50;
   ${Serif}
 `
 
 
-const IndexPageTemplate = () => {
-
-  const {modalState} = useModalContext()
-  const {disc1Tracks, disc2Tracks} = useTrackContext()
-
-  const currentTrackDisc1 = disc1Tracks.find((track) => (track.id == modalState.currentTrackId))
-  const currentTrackDisc2 = disc2Tracks.find((track) => (track.id == modalState.currentTrackId))
-
-  const currentDisc = currentTrackDisc1 ? Disc.Disc1 : Disc.Disc2
-  const currentTrack = currentTrackDisc1 ? currentTrackDisc1 : currentTrackDisc2
+const IndexPageTemplate = memo(() => {
 
   return (
     <div css={IndexPage}>
       <BackgroundCanvas style={CanvasStyle}/>
       <Logo style={LogoStyle}/>
-      <CSSTransition
-        in={currentTrack && modalState.isOpened}
-        timeout={200}
-        classNames="react-transition-group"
-        unmountOnExit
-      >
-        <div css={reactTransitionGroupWindow}>
-          <LyricsModalTemplate disc={currentDisc} track={currentTrack!} style={LyricsModalStyle}/>
-        </div>
-      </CSSTransition>
+      <LyricsModal/>
       <div css={Content}>
         <SectionTop/>
         <SectionTracks/>
         <SectionInfoCredits/>
       </div>
+      <MouseStalker/>
     </div>
   )
-}
+})
+
+IndexPageTemplate.displayName = "IndexPageTemplate"
 
 export default IndexPageTemplate

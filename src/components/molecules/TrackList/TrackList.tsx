@@ -1,8 +1,8 @@
 import {Track} from "types";
 import {css, SerializedStyles} from "@emotion/react";
 import {clw} from "util/size";
-import {useHover} from "hooks/hover";
 import TrackListItem from "../TrackListItem";
+import {memo} from "react";
 
 interface TrackListProps {
   tracks: Track[],
@@ -17,10 +17,10 @@ const Table = css`
   vertical-align: middle;
 `
 
-const TrackList = (props: TrackListProps) => {
+const TrackList = memo((props: TrackListProps) => {
 
   const {tracks, style} = props
-  const [hoverRef, isHover] = useHover()
+
   return (
     <div css={[style, Container]}>
       <table css={Table}>
@@ -32,6 +32,8 @@ const TrackList = (props: TrackListProps) => {
       </table>
     </div>
   )
-}
+})
+
+TrackList.displayName = "TrackList"
 
 export default TrackList

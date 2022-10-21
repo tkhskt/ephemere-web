@@ -7,6 +7,7 @@ import {InView} from "react-intersection-observer";
 import TracksCard from "components/organisms/TracksCard";
 import {Colors} from "styles/theme";
 import TrackLinePc from "assets/svg/track_line_pc.svg";
+import {memo} from "react";
 
 const Section = css`
   min-height: 100vh;
@@ -83,7 +84,7 @@ const InfoLinePcStyle = (inView: boolean) => {
   `
 }
 
-const SectionInfoCredits = () => {
+const SectionInfoCredits = memo(() => {
   return (
     <section>
       <div css={Section}>
@@ -114,6 +115,8 @@ const SectionInfoCredits = () => {
       </div>
     </section>
   )
-}
+})
+
+SectionInfoCredits.displayName = "SectionInfoCredits"
 
 export default SectionInfoCredits

@@ -1,5 +1,4 @@
 import React, {useContext, useReducer} from "react";
-import {TrackContext, useTrackContext} from "contexts/TrackContext/context";
 import {disc1} from "contexts/TrackContext/tracks";
 
 export const SET_IS_OPENED = 'SET_IS_OPENED'

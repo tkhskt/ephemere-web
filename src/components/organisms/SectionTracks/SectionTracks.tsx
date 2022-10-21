@@ -4,8 +4,8 @@ import TrackLinePc from 'assets/svg/track_line_pc.svg'
 import {Colors} from "styles/theme";
 import {css, keyframes} from "@emotion/react";
 import {clh, clw} from "util/size";
-import {useRelativeMousePosition} from "hooks/relativeMousePosition";
 import {InView} from "react-intersection-observer";
+import {memo} from "react";
 
 const Section = css`
   display: flex;
@@ -133,21 +133,9 @@ const Disc2TrackCardStyle = css`
   ${TrackCardStyle};
 `
 
-const SectionTracks = () => {
+const SectionTracks = memo(() => {
 
   const {disc1Tracks, disc2Tracks} = useTrackContext()
-
-  const cursorRelPosition = useRelativeMousePosition()
-
-  const bgLocation = (ratio: number) => {
-    return css()
-    // return css`
-    //   transform: translate(${-ratio * cursorRelPosition.relativeDistanceX}px, ${-ratio * cursorRelPosition.relativeDistanceY}px);
-    //   transform-origin: center;
-    //   //transition: transform 0.1s ease;
-    // `
-  }
-
 
   return (
     <section>
@@ -155,17 +143,17 @@ const SectionTracks = () => {
         <div css={Container}>
           <InView triggerOnce={true} delay={200}>
             {({inView, ref, entry}) => (
-              <div ref={ref} css={[BlueBackground(inView), bgLocation(0.3)]}/>
+              <div ref={ref} css={[BlueBackground(inView)]}/>
             )}
           </InView>
           <InView triggerOnce={true} delay={200}>
             {({inView, ref, entry}) => (
-              <div ref={ref} css={[GreenBackground(inView), bgLocation(0.5)]}/>
+              <div ref={ref} css={[GreenBackground(inView)]}/>
             )}
           </InView>
           <InView triggerOnce={true} delay={200}>
             {({inView, ref, entry}) => (
-              <div ref={ref} css={[BlueBackgroundBottom(inView), bgLocation(-0.1)]}/>
+              <div ref={ref} css={[BlueBackgroundBottom(inView)]}/>
             )}
           </InView>
           <InView triggerOnce={true} delay={500}>
@@ -194,6 +182,8 @@ const SectionTracks = () => {
       </div>
     </section>
   )
-}
+})
+
+SectionTracks.displayName = "SectionTracks"
 
 export default SectionTracks
