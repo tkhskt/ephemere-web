@@ -192,7 +192,7 @@ const SectionLyricsModal = memo((prop: LyricsModalTemplateProps) => {
     <section>
       <div css={Section}>
         <div css={BackgroundImage(isImageLoaded)}>
-          <Image layout='fill' objectFit='cover' src={pageState.isMobile ? disc.imageSp : disc.imagePc} alt=''
+          <Image layout='fill' objectFit='cover' src={disc.imagePc} alt=''
                  onLoadingComplete={() => setIsImageLoaded(true)}/>
         </div>
         <CloseButton style={CloseButtonStyle}/>
