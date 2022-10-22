@@ -3,7 +3,7 @@ import {Colors} from "styles/theme";
 import {clw, font} from "util/size";
 import {Adobe} from "styles/font";
 import {credits} from "values";
-import {HoveredElement, useMouseStalkerContext} from "contexts/MouseStalkerContext/context";
+import {HoveredElement, useIsHoverOnContext} from "contexts/MouseStalkerContext/context";
 import {memo, useCallback} from "react";
 import CreditListItem from "components/molecules/CreditListItem";
 import {sp} from "styles/mediaQuert";
@@ -55,7 +55,7 @@ const TableWrapper = css`
 
 const CreditsCard = memo(() => {
 
-  const {setIsHoverOn} = useMouseStalkerContext()
+  const setIsHoverOn = useIsHoverOnContext()
 
   const onHover = useCallback((isHover: boolean) => {
     if (isHover) {
@@ -63,8 +63,7 @@ const CreditsCard = memo(() => {
     } else {
       setIsHoverOn(HoveredElement.Others)
     }
-  }, [])
-
+  }, [setIsHoverOn])
 
   return (
     <div css={Card}>

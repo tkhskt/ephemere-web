@@ -1,5 +1,5 @@
 import {css, SerializedStyles} from "@emotion/react";
-import {useLayoutEffect, useRef} from "react";
+import {memo, useLayoutEffect, useRef} from "react";
 import Sketch from './sketch';
 import mainSp from '/public/img/main_sp.png';
 import {usePageContext} from "contexts/PageContext/context";
@@ -21,7 +21,7 @@ const SpBackground = css`
   height: 100%;
 `
 
-const BackgroundCanvas = (prop: BackgroundCanvasProps) => {
+const BackgroundCanvas = memo((prop: BackgroundCanvasProps) => {
 
   const mountRef = useRef<HTMLDivElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
@@ -78,6 +78,8 @@ const BackgroundCanvas = (prop: BackgroundCanvasProps) => {
       }
     </>
   )
-}
+})
+
+BackgroundCanvas.displayName = "BackgroundCanvas"
 
 export default BackgroundCanvas

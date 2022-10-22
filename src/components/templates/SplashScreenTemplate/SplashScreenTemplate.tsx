@@ -8,6 +8,7 @@ import gsap from "gsap";
 import {useScrollLock} from "hooks/scrollLock";
 import {disableBodyScroll, enableBodyScroll} from "body-scroll-lock";
 import {clw, font} from "util/size";
+import {getScrollbarWidth} from "styles/getScrollBarWidth";
 
 const Container = css`
   padding-top: ${clw(140)};
@@ -64,6 +65,7 @@ const SplashScreenTemplate = () => {
       const splash = splashRef.current
       if (splash == null) return
       disableBodyScroll(splash);
+      document.body.style.paddingRight = `${0}px`
       if (pageState.backgroundLoaded) {
         gsap.timeline()
           .to(splashRef.current, {
@@ -75,6 +77,7 @@ const SplashScreenTemplate = () => {
             onComplete() {
               enableBodyScroll(splash);
               splash.style.display = 'none'
+              document.body.style.paddingRight = `${getScrollbarWidth()}px`
             },
           })
       }

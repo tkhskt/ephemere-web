@@ -5,11 +5,9 @@ import {css} from "@emotion/react";
 import {Serif} from "styles/font";
 import {Colors} from "styles/theme";
 import MouseStalker from "components/atoms/MouseStalker/MouseStalker";
-import {memo, useLayoutEffect, useState} from "react";
+import {memo} from "react";
 import LyricsModal from "components/organisms/LyricsModal";
 import {sp} from "styles/mediaQuert";
-import {clw} from "util/size";
-import {useIsMobile} from "hooks/isMobile";
 
 const IndexPage = css`
   width: 100%;
@@ -22,7 +20,7 @@ const CanvasStyle = css`
   left: 0;
   width: 100%;
   height: 100vh;
-  background: ${Colors.Blue};
+  background: ${Colors.Black};
   z-index: 0;
   ${
     sp(css`
@@ -42,7 +40,7 @@ const LogoStyle = css`
   ${
     sp(css`
       width: 120.83px;
-      top: ${clw(24, )};
+      top: 24px;
       left: 24px;
     `)
   }
@@ -54,7 +52,6 @@ const Content = css`
 `
 
 const IndexPageTemplate = memo(() => {
-
   return (
     <div css={IndexPage}>
       <BackgroundCanvas style={CanvasStyle}/>

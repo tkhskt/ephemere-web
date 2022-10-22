@@ -7,7 +7,7 @@ import disc2BgPc from '/public/img/modal_disc2_bg_pc.png'
 import {Colors} from "styles/theme";
 import CloseButton from "components/atoms/CloseButton";
 import Image from "next/image";
-import {useRef, useState} from "react";
+import {memo, useRef, useState} from "react";
 import {useScrollLock} from "hooks/scrollLock";
 import {sp} from "styles/mediaQuert";
 import ModalTrackTitle from "components/atoms/ModalTrackTitle";
@@ -173,7 +173,7 @@ const TrackNameWrapperSp = css`
 `
 
 
-const SectionLyricsModal = (prop: LyricsModalTemplateProps) => {
+const SectionLyricsModal = memo((prop: LyricsModalTemplateProps) => {
   const {disc, track} = prop
 
   const [isImageLoaded, setIsImageLoaded] = useState(false)
@@ -216,6 +216,8 @@ const SectionLyricsModal = (prop: LyricsModalTemplateProps) => {
       </div>
     </section>
   )
-}
+})
+
+SectionLyricsModal.displayName = "SectionLyricsModal"
 
 export default SectionLyricsModal

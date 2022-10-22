@@ -1,4 +1,4 @@
-import React, {useContext, useReducer} from "react";
+import React, {useCallback, useContext, useReducer} from "react";
 
 export const SET_IS_MOBILE = 'SET_IS_MOBILE'
 export const SET_IS_BACKGROUND_LOADED = 'SET_IS_BACKGROUND_LOADED'
@@ -78,13 +78,13 @@ export const PageContextProvider = (
 ) => {
   const [pageState, dispatch] = useReducer(pageReducer, initialState)
 
-  const setIsMobile = (isMobile: boolean) => {
+  const setIsMobile = useCallback((isMobile: boolean) => {
     dispatch({type: SET_IS_MOBILE, payload: isMobile})
-  }
+  }, [])
 
-  const setIsBackgroundLoaded = (isLoaded: boolean) => {
+  const setIsBackgroundLoaded = useCallback((isLoaded: boolean) => {
     dispatch({type: SET_IS_BACKGROUND_LOADED, payload: isLoaded})
-  }
+  }, [])
 
   return (
     <PageContext.Provider value={

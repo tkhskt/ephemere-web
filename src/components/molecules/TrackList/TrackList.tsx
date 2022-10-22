@@ -2,9 +2,9 @@ import {Track} from "types";
 import {css, SerializedStyles} from "@emotion/react";
 import {clw} from "util/size";
 import TrackListItem from "../TrackListItem";
-import {memo, useCallback, useMemo} from "react";
-import {useModalContext} from "contexts/ModalContext/context";
-import {HoveredElement, useMouseStalkerContext} from "contexts/MouseStalkerContext/context";
+import {memo, useCallback} from "react";
+import {useCurrentIdContext, useIsOpenedContext} from "contexts/ModalContext/context";
+import {HoveredElement, useIsHoverOnContext} from "contexts/MouseStalkerContext/context";
 
 interface TrackListProps {
   tracks: Track[],
@@ -24,9 +24,11 @@ const TrackList = memo((props: TrackListProps) => {
 
   const {tracks, color, style} = props
 
-  const {setIsOpened, setCurrentTrackId} = useModalContext()
+  const setIsOpened = useIsOpenedContext()
 
-  const {setIsHoverOn} = useMouseStalkerContext()
+  const setCurrentTrackId = useCurrentIdContext()
+
+  const setIsHoverOn = useIsHoverOnContext()
 
   const onClickTrack = useCallback((track: Track) => {
     if (track.lyrics) {

@@ -1,4 +1,4 @@
-import React, {useContext, useReducer} from "react";
+import React, {createContext, Dispatch, useCallback, useContext, useReducer} from "react";
 
 export const SET_IS_HOVER_ON = 'SET_IS_HOVER_ON'
 
@@ -27,6 +27,7 @@ type MouseStalkerAction =
 
 const setIsHoverOn = (hoveredElement: HoveredElement, state: MouseStalkerState) => {
   return {
+    ...state,
     hoveredElement,
   }
 }
@@ -45,17 +46,20 @@ export const mouseStalkerReducer: React.Reducer<MouseStalkerState, MouseStalkerA
 
 type MouseStalkerContextType = {
   mouseStalkerState: MouseStalkerState,
-  setIsHoverOn: (hoverOn: HoveredElement) => void,
 }
 
 export const MouseStalkerContext = React.createContext<MouseStalkerContextType>({
   mouseStalkerState: initialState,
-  setIsHoverOn: (hoverOn: HoveredElement) => {
-  },
 })
+
+const setIsHoverOnContext = createContext<Dispatch<HoveredElement>>(
+  () => undefined
+);
 
 export const useMouseStalkerContext = (): MouseStalkerContextType =>
   useContext<MouseStalkerContextType>(MouseStalkerContext)
+
+export const useIsHoverOnContext = () => useContext(setIsHoverOnContext)
 
 interface MouseStalkerContextProviderProps {
   children?: React.ReactNode
@@ -68,18 +72,19 @@ export const MouseStalkerContextProvider = (
 ) => {
   const [mouseStalkerState, dispatch] = useReducer(mouseStalkerReducer, initialState)
 
-  const setIsHoverOn = (hoverOn: HoveredElement) => {
+  const setIsHoverOn = useCallback((hoverOn: HoveredElement) => {
     dispatch({type: SET_IS_HOVER_ON, payload: hoverOn})
-  }
+  }, [])
 
   return (
     <MouseStalkerContext.Provider value={
       {
         mouseStalkerState: mouseStalkerState,
-        setIsHoverOn: setIsHoverOn
       }
     }>
-      {children}
+      <setIsHoverOnContext.Provider value={setIsHoverOn}>
+        {children}
+      </setIsHoverOnContext.Provider>
     </MouseStalkerContext.Provider>
   )
 }

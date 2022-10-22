@@ -1,4 +1,4 @@
-import React, {createContext, Dispatch, SetStateAction, useContext, useReducer} from "react";
+import React, {createContext, Dispatch, useCallback, useContext, useReducer} from "react";
 import {disc1} from "contexts/TrackContext/tracks";
 
 export const SET_IS_OPENED = 'SET_IS_OPENED'
@@ -63,24 +63,26 @@ export const modalReducer: React.Reducer<ModalState, ModalReducerAction> = (
 
 type ModalContextType = {
   modalState: ModalState,
-  setIsOpened: (isOpened: boolean) => void,
-  setCurrentTrackId: (trackId: number) => void
 }
 
 export const ModalContext = React.createContext<ModalContextType>({
   modalState: initialState,
-  setIsOpened: (isOpened: boolean) => {
-  },
-  setCurrentTrackId: (trackId: number) => {
-  },
 })
+
+const setIsOpenedContext = createContext<Dispatch<boolean>>(
+  () => undefined
+);
+
+const setCurrentIdContext = createContext<Dispatch<number>>(
+  () => undefined
+);
 
 export const useModalContext = (): ModalContextType =>
   useContext<ModalContextType>(ModalContext)
 
-const setModalStateContext = createContext<Dispatch<ModalContextType>>(
-  () => undefined
-);
+export const useIsOpenedContext = () => useContext(setIsOpenedContext)
+
+export const useCurrentIdContext = () => useContext(setCurrentIdContext)
 
 interface ModalContextProviderProps {
   children?: React.ReactNode
@@ -93,23 +95,25 @@ export const ModalContextProvider = (
 ) => {
   const [modalState, dispatch] = useReducer(modalReducer, initialState)
 
-  const setIsOpened = (isOpened: boolean) => {
+  const setIsOpened = useCallback((isOpened: boolean) => {
     dispatch({type: SET_IS_OPENED, payload: isOpened})
-  }
+  }, [])
 
-  const setCurrentTrackId = (trackId: number) => {
+  const setCurrentTrackId = useCallback((trackId: number) => {
     dispatch({type: SET_CURRENT_TRACK_ID, payload: trackId})
-  }
+  }, [])
 
   return (
     <ModalContext.Provider value={
       {
         modalState: modalState,
-        setIsOpened: setIsOpened,
-        setCurrentTrackId: setCurrentTrackId,
       }
     }>
-      {children}
+      <setIsOpenedContext.Provider value={setIsOpened}>
+        <setCurrentIdContext.Provider value={setCurrentTrackId}>
+          {children}
+        </setCurrentIdContext.Provider>
+      </setIsOpenedContext.Provider>
     </ModalContext.Provider>
   )
 }

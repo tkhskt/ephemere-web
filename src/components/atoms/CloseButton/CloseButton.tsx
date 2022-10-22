@@ -1,4 +1,4 @@
-import {useModalContext} from "contexts/ModalContext/context";
+import {useIsOpenedContext, useModalContext} from "contexts/ModalContext/context";
 import {css, keyframes, SerializedStyles} from "@emotion/react";
 import {clw} from "util/size";
 import {Colors} from "styles/theme";
@@ -71,7 +71,7 @@ const StrokeHovered = (delayMs: number) => {
 
 const CloseButton = (prop: CloseButtonProps) => {
 
-  const {setIsOpened} = useModalContext()
+  const setIsOpened = useIsOpenedContext()
 
   const [ref, isHovered] = useHover()
 

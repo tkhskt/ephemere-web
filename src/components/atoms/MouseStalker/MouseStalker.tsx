@@ -116,7 +116,6 @@ const MouseStalker = memo(() => {
                   border: `solid 1px ${Colors.White}`,
                 }
               })
-
             break;
           case HoveredElement.Track:
             gsap.timeline()

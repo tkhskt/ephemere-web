@@ -2,7 +2,7 @@ import {css} from "@emotion/react";
 import {Colors} from "styles/theme";
 import {memo, useLayoutEffect, useState} from "react";
 import {useHover} from "hooks/hover";
-import {HoveredElement, useMouseStalkerContext} from "contexts/MouseStalkerContext/context";
+import {HoveredElement, useIsHoverOnContext, useMouseStalkerContext} from "contexts/MouseStalkerContext/context";
 import {sp} from "styles/mediaQuert";
 import {clw} from "util/size";
 import {spWidth} from "values";
@@ -41,7 +41,7 @@ const SectionTop = memo(() => {
 
   const [vh, setVh] = useState(0)
   const [topRef, isHoverLink] = useHover()
-  const {setIsHoverOn} = useMouseStalkerContext()
+  const setIsHoverOn = useIsHoverOnContext()
   const isMobile = useIsMobile()
 
   useLayoutEffect(() => {
