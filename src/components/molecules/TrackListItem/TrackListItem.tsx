@@ -212,7 +212,7 @@ const TrackListItem = memo((prop: TrackListItemProps) => {
             cursor: default`, track.lyrics && Clickable]}>{track.name}</p>
             {
               track.featuredArtist &&
-              <p css={css`display: inline`}><span onClick={() => onClickTrack}
+              <p css={css`display: inline`}><span onClick={() => onClickTrack(track)}
                                                   css={track.lyrics && Clickable}> feat. </span>
                 <a css={FeaturedArtistLink} ref={featuredArtistRef} href={track.featuredArtist.url}
                    target='_blank'
@@ -220,7 +220,7 @@ const TrackListItem = memo((prop: TrackListItemProps) => {
                   css={[ArtistStroke, isHoverFeaturedArtist && ArtistStrokeHover]}/></a></p>
             }
           </div>
-          <div ref={strokeHoverRef} onClick={() => onClickTrack}
+          <div ref={strokeHoverRef} onClick={() => onClickTrack(track)}
                css={[StrokeContainer, track.lyrics && Clickable]}><span
             css={[Stroke, ((isHover || isHoverStroke) && !isHoverFeaturedArtist) && StrokeHover]}/>
           </div>
@@ -230,7 +230,7 @@ const TrackListItem = memo((prop: TrackListItemProps) => {
                           rel="noreferrer">{track.artist.name} <span
         css={[ArtistStroke, isHoverArtist && ArtistStrokeHover]}/></a></td>
       {track.lyrics &&
-        <td css={LyricsSp}><p onClick={() => onClickTrack}
+        <td css={LyricsSp}><p onClick={() => onClickTrack(track)}
                               css={[LyricsSpText, css`border-color: ${color}`]}>Lyrics</p></td>
       }
     </tr>

@@ -1,16 +1,22 @@
-import React, {useCallback, useContext, useReducer} from "react";
+import React, {createContext, Dispatch, useCallback, useContext, useReducer} from "react";
 
 export const SET_IS_MOBILE = 'SET_IS_MOBILE'
 export const SET_IS_BACKGROUND_LOADED = 'SET_IS_BACKGROUND_LOADED'
+export const SET_ON_TRACK = 'SET_ON_TRACK'
+export const SET_ON_INFO_CREDITS = 'SET_ON_INFO_CREDITS'
 
 export interface PageState {
   isMobile: boolean,
-  backgroundLoaded: boolean
+  backgroundLoaded: boolean,
+  onTrack: boolean,
+  onInfoCredits: boolean
 }
 
 const initialState = {
   isMobile: false,
-  backgroundLoaded: false
+  backgroundLoaded: false,
+  onTrack: false,
+  onInfoCredits: false
 }
 
 type PageReducerAction =
@@ -19,6 +25,12 @@ type PageReducerAction =
   payload: boolean
 } | {
   type: 'SET_IS_BACKGROUND_LOADED'
+  payload: boolean
+} | {
+  type: 'SET_ON_TRACK'
+  payload: boolean
+} | {
+  type: 'SET_ON_INFO_CREDITS'
   payload: boolean
 }
 
@@ -36,6 +48,20 @@ const setIsBackgroundLoaded = (isLoaded: boolean, state: PageState) => {
   }
 }
 
+const setOnTrack = (onTrack: boolean, state: PageState) => {
+  return {
+    ...state,
+    onTrack: onTrack
+  }
+}
+
+const setOnInfoCredits = (onInfoCredits: boolean, state: PageState) => {
+  return {
+    ...state,
+    onInfoCredits: onInfoCredits
+  }
+}
+
 export const pageReducer: React.Reducer<PageState, PageReducerAction> = (
   state: PageState,
   action: PageReducerAction,
@@ -45,6 +71,10 @@ export const pageReducer: React.Reducer<PageState, PageReducerAction> = (
       return setIsMobile(action.payload, state)
     case SET_IS_BACKGROUND_LOADED:
       return setIsBackgroundLoaded(action.payload, state)
+    case SET_ON_TRACK:
+      return setOnTrack(action.payload, state)
+    case SET_ON_INFO_CREDITS:
+      return setOnInfoCredits(action.payload, state)
     default:
       return state
   }
@@ -64,8 +94,20 @@ export const PageContext = React.createContext<PageContextType>({
   },
 })
 
+export const setOnTracksContext = createContext<Dispatch<boolean>>(
+  () => undefined
+)
+
+export const setOnInfoCreditsContext = createContext<Dispatch<boolean>>(
+  () => undefined
+)
+
 export const usePageContext = (): PageContextType =>
   useContext<PageContextType>(PageContext)
+
+export const useOnTracksContextContext = () => useContext(setOnTracksContext)
+
+export const useOnInfoCreditsContext= () => useContext(setOnInfoCreditsContext)
 
 interface PageContextProviderProps {
   children?: React.ReactNode
@@ -86,6 +128,14 @@ export const PageContextProvider = (
     dispatch({type: SET_IS_BACKGROUND_LOADED, payload: isLoaded})
   }, [])
 
+  const setOnTrack = useCallback((onTrack: boolean) => {
+    dispatch({type: SET_ON_TRACK, payload: onTrack})
+  }, [])
+
+  const setOnInfoCredits = useCallback((onInfoCredits: boolean) => {
+    dispatch({type: SET_ON_INFO_CREDITS, payload: onInfoCredits})
+  }, [])
+
   return (
     <PageContext.Provider value={
       {
@@ -94,7 +144,15 @@ export const PageContextProvider = (
         setIsBackgroundLoaded: setIsBackgroundLoaded,
       }
     }>
-      {children}
+      <setOnTracksContext.Provider
+        value={setOnTrack}
+      >
+        <setOnInfoCreditsContext.Provider
+          value={setOnInfoCredits}
+        >
+          {children}
+        </setOnInfoCreditsContext.Provider>
+      </setOnTracksContext.Provider>
     </PageContext.Provider>
   )
 }

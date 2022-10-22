@@ -8,6 +8,7 @@ import MouseStalker from "components/atoms/MouseStalker/MouseStalker";
 import {memo} from "react";
 import LyricsModal from "components/organisms/LyricsModal";
 import {sp} from "styles/mediaQuert";
+import {ZIndex} from "values";
 
 const IndexPage = css`
   width: 100%;
@@ -35,7 +36,7 @@ const LogoStyle = css`
   position: fixed;
   top: min(120px, 11.1vh);
   left: min(7.44vw, 143px);
-  z-index: 999999;
+  z-index: ${ZIndex.Logo};
   width: 296.83px;
   ${
     sp(css`

@@ -5,8 +5,10 @@ import {Colors} from "styles/theme";
 import {css, keyframes} from "@emotion/react";
 import {clh, clw} from "util/size";
 import {InView} from "react-intersection-observer";
-import {memo} from "react";
+import {memo, useLayoutEffect, useMemo, useRef} from "react";
 import {sp} from "styles/mediaQuert";
+import {useOffsetTop} from "hooks/position";
+import {useOnTracksContextContext, usePageContext} from "contexts/PageContext/context";
 
 const Section = css`
   display: flex;
@@ -31,7 +33,7 @@ const Container = css`
   padding: ${clw(48)} 0;
   width: 100%;
   max-width: ${clw(1754)};
- overflow: visible;
+  overflow: visible;
   ${
     sp(css`
       flex-direction: column;
@@ -177,7 +179,7 @@ const Disc2TrackCardStyle = css`
   ${
     sp(css`
       margin-top: 48px;
-      `)
+    `)
   }
 `
 
@@ -185,51 +187,81 @@ const SectionTracks = memo(() => {
 
   const {disc1Tracks, disc2Tracks} = useTrackContext()
 
-  return (
-    <section>
-      <div css={Section}>
-        <div css={Container}>
-          <InView triggerOnce={true} delay={200}>
-            {({inView, ref, entry}) => (
-              <div ref={ref} css={[BlueBackground(inView)]}/>
-            )}
-          </InView>
-          <InView triggerOnce={true} delay={200}>
-            {({inView, ref, entry}) => (
-              <div ref={ref} css={[GreenBackground(inView)]}/>
-            )}
-          </InView>
-          <InView triggerOnce={true} delay={200}>
-            {({inView, ref, entry}) => (
-              <div ref={ref} css={[BlueBackgroundBottom(inView)]}/>
-            )}
-          </InView>
-          <InView triggerOnce={true} delay={500}>
-            {({inView, ref, entry}) => (
-              <div ref={ref} css={TrackLinePcStyle(inView)}>
-                <TrackLinePc/>
-              </div>
-            )}
-          </InView>
-          <InView triggerOnce={true} delay={500}>
-            {({inView, ref, entry}) => (
-              <div ref={ref} css={CardWrapper(inView)}>
-                <TracksCard title={'Disc 1 (melancholy)'} color={Colors.Blue} tracks={disc1Tracks}/>
-              </div>
-            )}
-          </InView>
-          <InView triggerOnce={true} delay={700}>
-            {({inView, ref, entry}) => (
-              <div ref={ref} css={CardWrapper(inView)}>
-                <TracksCard title={'Disc 2 (perseverance)'} color={Colors.Yellow} tracks={disc2Tracks}
-                            style={Disc2TrackCardStyle}/>
-              </div>
-            )}
-          </InView>
+  const sectionRef = useRef(null)
+
+  const {viewportTop} = useOffsetTop(sectionRef);
+
+  const {pageState} = usePageContext()
+
+  const onTracksContextContext = useOnTracksContextContext()
+
+  useLayoutEffect(() => {
+    const node = sectionRef.current
+    if (node != null && viewportTop) {
+      const elm = node as HTMLElement
+      const bottom = viewportTop + elm.clientHeight
+
+      let onDark
+      if (pageState.isMobile) {
+        onDark = bottom > 100 && bottom < elm.clientHeight - 40
+      } else {
+        const logoTop = Math.min(window.innerHeight * 0.111, 120)
+        const rightTrackTopMargin = Math.max(42, window.innerWidth * 0.02185)
+        const padding = Math.max(48, window.innerWidth * 0.025)
+        onDark = bottom > (logoTop + 58) + padding + rightTrackTopMargin && bottom < elm.clientHeight + logoTop
+      }
+      onTracksContextContext(onDark)
+    }
+  }, [onTracksContextContext, pageState.isMobile, viewportTop])
+
+
+  return useMemo(() => {
+    return (
+      <section>
+        <div css={Section}>
+          <div ref={sectionRef} css={Container}>
+            <InView triggerOnce={true} delay={200}>
+              {({inView, ref, entry}) => (
+                <div ref={ref} css={[BlueBackground(inView)]}/>
+              )}
+            </InView>
+            <InView triggerOnce={true} delay={200}>
+              {({inView, ref, entry}) => (
+                <div ref={ref} css={[GreenBackground(inView)]}/>
+              )}
+            </InView>
+            <InView triggerOnce={true} delay={200}>
+              {({inView, ref, entry}) => (
+                <div ref={ref} css={[BlueBackgroundBottom(inView)]}/>
+              )}
+            </InView>
+            <InView triggerOnce={true} delay={500}>
+              {({inView, ref, entry}) => (
+                <div ref={ref} css={TrackLinePcStyle(inView)}>
+                  <TrackLinePc/>
+                </div>
+              )}
+            </InView>
+            <InView triggerOnce={true} delay={500}>
+              {({inView, ref, entry}) => (
+                <div ref={ref} css={CardWrapper(inView)}>
+                  <TracksCard title={'Disc 1 (melancholy)'} color={Colors.Blue} tracks={disc1Tracks}/>
+                </div>
+              )}
+            </InView>
+            <InView triggerOnce={true} delay={700}>
+              {({inView, ref, entry}) => (
+                <div ref={ref} css={CardWrapper(inView)}>
+                  <TracksCard title={'Disc 2 (perseverance)'} color={Colors.Yellow} tracks={disc2Tracks}
+                              style={Disc2TrackCardStyle}/>
+                </div>
+              )}
+            </InView>
+          </div>
         </div>
-      </div>
-    </section>
-  )
+      </section>
+    )
+  }, [disc1Tracks, disc2Tracks])
 })
 
 SectionTracks.displayName = "SectionTracks"

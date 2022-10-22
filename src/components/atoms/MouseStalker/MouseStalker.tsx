@@ -2,7 +2,7 @@ import {useMousePosition} from "hooks/mousePosition";
 import {css} from "@emotion/react";
 import {Colors} from "styles/theme";
 import {ZIndex} from "values";
-import {memo, useLayoutEffect, useRef} from "react";
+import {memo, useLayoutEffect, useMemo, useRef} from "react";
 import gsap from "gsap";
 import {HoveredElement, useMouseStalkerContext} from "contexts/MouseStalkerContext/context";
 import {Canto} from "styles/font";
@@ -60,6 +60,16 @@ const MouseStalker = memo(() => {
 
     const isMobile = useIsMobile()
 
+    const text = useMemo(() => {
+      if (mouseStalkerState.hoveredElement == HoveredElement.Track) {
+        return "Lyrics"
+      } else if (mouseStalkerState.hoveredElement == HoveredElement.Top) {
+        return "Scroll"
+      } else {
+        return ""
+      }
+    }, [mouseStalkerState.hoveredElement])
+
     useLayoutEffect(() => {
       if (isMobile) return
       gsap.context(() => {
@@ -67,8 +77,7 @@ const MouseStalker = memo(() => {
           duration: 0.2,
           transform: `translate3d(calc(${position.x ? position.x : 0}px - 50%), calc(${position.y ? position.y : 0}px - 50%), 0)`
         })
-
-      }, [cursorRef]);// <- Scope!
+      }, [cursorRef]);
     }, [position, cursorRef, isMobile]);
 
     useLayoutEffect(() => {
@@ -167,7 +176,7 @@ const MouseStalker = memo(() => {
         <div css={MouseWrapper}>
           <div ref={cursorRef} className="cursor" css={Mouse}>
           <span ref={textRef}
-                css={Text}> {mouseStalkerState.hoveredElement == HoveredElement.Track ? "Lyrics" : "Scroll"}</span>
+                css={Text}>{text}</span>
           </div>
         </div>}
       </>

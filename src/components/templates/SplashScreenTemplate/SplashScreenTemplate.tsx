@@ -65,7 +65,7 @@ const SplashScreenTemplate = () => {
       const splash = splashRef.current
       if (splash == null) return
       disableBodyScroll(splash);
-      document.body.style.paddingRight = `${0}px`
+      document.body.style.paddingRight = `${getScrollbarWidth()}px`
       if (pageState.backgroundLoaded) {
         gsap.timeline()
           .to(splashRef.current, {
@@ -77,7 +77,7 @@ const SplashScreenTemplate = () => {
             onComplete() {
               enableBodyScroll(splash);
               splash.style.display = 'none'
-              document.body.style.paddingRight = `${getScrollbarWidth()}px`
+              document.body.style.paddingRight = `${0}px`
             },
           })
       }

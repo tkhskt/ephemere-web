@@ -4,8 +4,10 @@ import {css, keyframes} from "@emotion/react";
 import {clh, clw} from "util/size";
 import InfoLinePc from 'assets/svg/info_line_pc.svg'
 import {InView} from "react-intersection-observer";
-import {memo} from "react";
+import {memo, useLayoutEffect, useMemo, useRef} from "react";
 import {sp} from "styles/mediaQuert";
+import {useOffsetTop} from "hooks/position";
+import {useOnInfoCreditsContext, usePageContext} from "contexts/PageContext/context";
 
 const Section = css`
   min-height: 100vh;
@@ -121,36 +123,63 @@ const InfoLinePcStyle = (inView: boolean) => {
 }
 
 const SectionInfoCredits = memo(() => {
-  return (
-    <section>
-      <div css={Section}>
-        <div css={Container}>
-          <InView triggerOnce={true} delay={500}>
-            {({inView, ref, entry}) => (
-              <div ref={ref} css={InfoLinePcStyle(inView)}>
-                <InfoLinePc/>
-              </div>
-            )}
-          </InView>
+  const sectionRef = useRef(null)
 
-          <InView triggerOnce={true} delay={500}>
-            {({inView, ref, entry}) => (
-              <div ref={ref} css={InfoCardWrapper(inView)}>
-                <InfoCard/>
-              </div>
-            )}
-          </InView>
-          <InView triggerOnce={true} delay={700}>
-            {({inView, ref, entry}) => (
-              <div ref={ref} css={CreditsCardWrapper(inView)}>
-                <CreditsCard/>
-              </div>
-            )}
-          </InView>
+  const {viewportTop} = useOffsetTop(sectionRef);
+
+  const {pageState} = usePageContext()
+
+  const onInfoCreditsContext = useOnInfoCreditsContext()
+
+  useLayoutEffect(() => {
+    const node = sectionRef.current
+    if (node != null && viewportTop) {
+      const elm = node as HTMLElement
+      const bottom = viewportTop + elm.clientHeight
+
+      let onDark
+      if (pageState.isMobile) {
+        onDark = bottom > 24 && bottom < elm.clientHeight - 40
+      } else {
+        const logoTop = Math.min(window.innerHeight * 0.111, 120)
+        onDark = bottom > (logoTop + 58) && bottom < elm.clientHeight + logoTop + 58
+      }
+      onInfoCreditsContext(onDark)
+    }
+  }, [onInfoCreditsContext, pageState.isMobile, viewportTop])
+
+  return useMemo(() => {
+    return (
+      <section>
+        <div css={Section}>
+          <div ref={sectionRef} css={Container}>
+            <InView triggerOnce={true} delay={500}>
+              {({inView, ref, entry}) => (
+                <div ref={ref} css={InfoLinePcStyle(inView)}>
+                  <InfoLinePc/>
+                </div>
+              )}
+            </InView>
+
+            <InView triggerOnce={true} delay={500}>
+              {({inView, ref, entry}) => (
+                <div ref={ref} css={InfoCardWrapper(inView)}>
+                  <InfoCard/>
+                </div>
+              )}
+            </InView>
+            <InView triggerOnce={true} delay={700}>
+              {({inView, ref, entry}) => (
+                <div ref={ref} css={CreditsCardWrapper(inView)}>
+                  <CreditsCard/>
+                </div>
+              )}
+            </InView>
+          </div>
         </div>
-      </div>
-    </section>
-  )
+      </section>
+    )
+  }, [])
 })
 
 SectionInfoCredits.displayName = "SectionInfoCredits"
