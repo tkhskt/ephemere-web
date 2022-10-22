@@ -23,7 +23,7 @@ export function useOffsetTop(ref?: RefObject<HTMLElement>) {
 
     // アンマウント時にイベントリスナーを解除
     return () => window.removeEventListener("scroll", handler);
-  }, [handler]);
+  }, [handler, ref]);
 
   return {viewportTop, pageOffsetTop};
 }

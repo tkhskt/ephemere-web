@@ -9,9 +9,9 @@ import {useScrollLock} from "hooks/scrollLock";
 import {disableBodyScroll, enableBodyScroll} from "body-scroll-lock";
 import {clw, font} from "util/size";
 import {getScrollbarWidth} from "styles/getScrollBarWidth";
+import {sp} from "styles/mediaQuert";
 
 const Container = css`
-  padding-top: ${clw(140)};
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -27,6 +27,7 @@ const Container = css`
 `
 
 const Text = css`
+  position: relative;
   user-select: none;
   cursor: default;
   animation: ${keyframes`
@@ -40,9 +41,18 @@ const Text = css`
   `} 2s ease forwards;
 `
 
+const LoadingWrapper = css`
+  position: absolute;
+  bottom: ${clw(200)};
+  ${sp(css`
+    bottom: 100px;
+  `)}
+`
+
 const LoadingText = css`
+  width: 200px;
+  position: relative;
   font-size: ${font(12)};
-  margin-top: ${clw(140)};
   text-align: center;
   user-select: none;
   animation: ${keyframes`
@@ -54,6 +64,38 @@ const LoadingText = css`
 
     }
   `} 2s ease forwards;
+
+  &:after {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    background: ${Colors.White};
+    content: '';
+
+    animation: ${keyframes`
+      0% {
+        width: 0;
+      }
+      50% {
+        left: 40%;
+        width: 60%;
+      }
+      51% {
+        left: auto;
+        right: 0;
+      }
+      99% {
+        width: 0;
+        left: auto;
+        right: 0;
+      }
+      100% {
+        right: auto;
+        left: 0;
+      }
+    `} 1.5s linear infinite;
+  }
 `
 
 const SplashScreenTemplate = () => {
@@ -88,7 +130,9 @@ const SplashScreenTemplate = () => {
   return (
     <div ref={splashRef} css={[Container]}>
       <p css={Text}>Electronica will live forever.</p>
-      <p css={LoadingText}>loading...</p>
+      <div css={LoadingWrapper}>
+        <p css={LoadingText}>Loading</p>
+      </div>
     </div>
   )
 }

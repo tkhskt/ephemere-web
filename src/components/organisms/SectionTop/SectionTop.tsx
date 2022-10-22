@@ -1,6 +1,6 @@
 import {css} from "@emotion/react";
 import {Colors} from "styles/theme";
-import {memo, useLayoutEffect, useState} from "react";
+import {memo, useLayoutEffect, useMemo, useState} from "react";
 import {useHover} from "hooks/hover";
 import {HoveredElement, useIsHoverOnContext, useMouseStalkerContext} from "contexts/MouseStalkerContext/context";
 import {sp} from "styles/mediaQuert";
@@ -50,19 +50,21 @@ const SectionTop = memo(() => {
     } else {
       setIsHoverOn(HoveredElement.Others)
     }
-  }, [topRef, isHoverLink])
+  }, [topRef, isHoverLink, setIsHoverOn])
 
   useLayoutEffect(() => {
     setVh(window.innerHeight)
   }, [isMobile])
 
-  return (
-    <section ref={topRef}>
-      <div css={TopContainer(vh)}>
-        <p css={Concept}>“éphémère”is a story of the delicate balance between happiness and sadness.</p>
-      </div>
-    </section>
-  )
+  return useMemo(() => {
+    return (
+      <section ref={topRef}>
+        <div css={TopContainer(vh)}>
+          <p css={Concept}>“éphémère”is a story of the delicate balance between happiness and sadness.</p>
+        </div>
+      </section>
+    )
+  }, [topRef, vh])
 })
 
 SectionTop.displayName = "SectionTop"

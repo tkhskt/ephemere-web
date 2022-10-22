@@ -180,18 +180,7 @@ const TrackListItem = memo((prop: TrackListItemProps) => {
     } else {
       onHoverOthers()
     }
-  }, [
-    artistHoverRef,
-    isHoverArtist,
-    featuredArtistRef,
-    strokeHoverRef,
-    isHoverFeaturedArtist,
-    trackHoverRef,
-    isHover,
-    isHoverFeaturedArtist,
-    isHoverArtist,
-    isHoverStroke
-  ])
+  }, [artistHoverRef, isHoverArtist, featuredArtistRef, strokeHoverRef, isHoverFeaturedArtist, trackHoverRef, isHover, isHoverStroke, track.lyrics, onHoverTrack, onHoverLink, onHoverOthers])
 
   return (
     <tr key={track.id} css={TrackItem}>

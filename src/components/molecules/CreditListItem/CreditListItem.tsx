@@ -56,7 +56,7 @@ const CreditListItem = memo((prop: CreditListItemProps) => {
 
   useLayoutEffect(() => {
     onHoverLink(isHoverLink)
-  }, [linkHoverRef, isHoverLink])
+  }, [linkHoverRef, isHoverLink, onHoverLink])
 
   return (
     <tr>
