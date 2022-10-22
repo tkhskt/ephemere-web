@@ -90,6 +90,8 @@ const TrackListItem = memo((prop: TrackListItemProps) => {
 
   const [trackHoverRef, isHover] = useHover()
 
+  const [strokeHoverRef, isHoverStroke] = useHover()
+
   const [featuredArtistRef, isHoverFeaturedArtist] = useHover()
 
   const [artistHoverRef, isHoverArtist] = useHover()
@@ -97,14 +99,25 @@ const TrackListItem = memo((prop: TrackListItemProps) => {
   const {setIsHoverOn} = useMouseStalkerContext()
 
   useLayoutEffect(() => {
-    if (isHover && !isHoverFeaturedArtist && track.lyrics) {
+    if ((isHover || isHoverStroke) && !isHoverFeaturedArtist && track.lyrics) {
       setIsHoverOn(HoveredElement.Track)
     } else if (isHoverArtist || isHoverFeaturedArtist) {
       setIsHoverOn(HoveredElement.Link)
     } else {
       setIsHoverOn(HoveredElement.Others)
     }
-  }, [artistHoverRef, isHoverArtist, featuredArtistRef, isHoverFeaturedArtist, trackHoverRef, isHover, isHoverFeaturedArtist, isHoverArtist])
+  }, [
+    artistHoverRef,
+    isHoverArtist,
+    featuredArtistRef,
+    strokeHoverRef,
+    isHoverFeaturedArtist,
+    trackHoverRef,
+    isHover,
+    isHoverFeaturedArtist,
+    isHoverArtist,
+    isHoverStroke
+  ])
 
   return (
     <tr key={track.id} css={TrackItem}>
@@ -115,18 +128,21 @@ const TrackListItem = memo((prop: TrackListItemProps) => {
           align-items: center;
           padding: .4em 0;
         `}>
-          <div><p ref={trackHoverRef} onClick={() => onClickTrack(track)} css={[css`display: inline`, track.lyrics && Clickable]}>{track.name}</p>
+          <div ref={trackHoverRef}><p onClick={() => onClickTrack(track)}
+                                      css={[css`display: inline; cursor: default`, track.lyrics && Clickable]}>{track.name}</p>
             {
               track.featuredArtist &&
-              <p css={css`display: inline`}><span onClick={() => onClickTrack(track)} css={track.lyrics && Clickable}> feat. </span>
+              <p css={css`display: inline`}><span onClick={() => onClickTrack(track)}
+                                                  css={track.lyrics && Clickable}> feat. </span>
                 <a css={FeaturedArtistLink} ref={featuredArtistRef} href={track.featuredArtist.url}
                    target='_blank'
                    rel="noreferrer">{track.featuredArtist.name}<span
                   css={[ArtistStroke, isHoverFeaturedArtist && ArtistStrokeHover]}/></a></p>
             }
           </div>
-          <div onClick={() => onClickTrack(track)} css={[StrokeContainer, track.lyrics && Clickable]}><span
-            css={[Stroke, (isHover && !isHoverFeaturedArtist) && StrokeHover]}/>
+          <div ref={strokeHoverRef} onClick={() => onClickTrack(track)}
+               css={[StrokeContainer, track.lyrics && Clickable]}><span
+            css={[Stroke, ((isHover || isHoverStroke) && !isHoverFeaturedArtist) && StrokeHover]}/>
           </div>
         </div>
       </td>
