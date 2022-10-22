@@ -1,10 +1,11 @@
 import {css, SerializedStyles} from "@emotion/react";
-import {memo, useLayoutEffect, useRef} from "react";
+import {memo, useLayoutEffect, useMemo, useRef} from "react";
 import Sketch from './sketch';
 import mainSp from '/public/img/main_sp.png';
 import {usePageContext} from "contexts/PageContext/context";
 import {useIsMobile} from "hooks/isMobile";
 import Image from "next/image";
+import * as THREE from 'three'
 
 
 interface BackgroundCanvasProps {
@@ -21,63 +22,84 @@ const SpBackground = css`
   height: 100%;
 `
 
+async function supportsWebp() {
+  if (!self.createImageBitmap) return false;
+
+  const webpData = 'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA=';
+  const blob = await fetch(webpData).then(r => r.blob());
+  return createImageBitmap(blob).then(() => true, () => false);
+}
+
 const BackgroundCanvas = memo((prop: BackgroundCanvasProps) => {
 
   const mountRef = useRef<HTMLDivElement>(null)
-  const imgRef = useRef<HTMLImageElement>(null)
-
   const isMobile = useIsMobile()
 
   useLayoutEffect(() => {
     window.dispatchEvent(new Event('resize'))
   }, [])
 
+  const {setIsBackgroundLoaded} = usePageContext()
+
   useLayoutEffect(() => {
     const elm = mountRef.current
-    const img = imgRef.current
+    if (!elm) return
+    let sketch: Sketch | null = null
 
-    if (!elm || !img || window.innerWidth < 1025) return
-
-    if (img.complete) {
-      setIsBackgroundLoaded(true)
-    } else {
-      img.onload = () => {
-        setIsBackgroundLoaded(true)
+    if (!elm || window.innerWidth < 1025) return
+    const texLoader = new THREE.TextureLoader();
+    (async () => {
+      if (await supportsWebp()) {
+        texLoader.load("/img/main.webp",
+          (texture) => {
+            setIsBackgroundLoaded(true)
+            sketch = new Sketch({
+              dom: elm,
+              texture: texture,
+            })
+          }
+        )
+      } else {
+        texLoader.load("/img/main.png",
+          (texture) => {
+            setIsBackgroundLoaded(true)
+            sketch = new Sketch({
+              dom: elm,
+              texture: texture,
+            })
+          }
+        )
       }
-    }
-
-    const sketch = new Sketch({
-      dom: elm,
-      img: img,
-    })
+    })();
     return () => {
-      elm?.removeChild(sketch.renderer.domElement)
+      if (sketch) {
+        elm?.removeChild(sketch.renderer.domElement)
+      }
     }
   }, [isMobile])
 
-  const {setIsBackgroundLoaded} = usePageContext()
-
-  return (
-    <>
-      {
-        !isMobile ?
-          <div css={prop.style}>
-            <div ref={mountRef}
-                 id='canvas'
-                 css={Canvas}
-                 data-grid="90"
-                 data-mouse="0.02"
-                 data-strength="0.0"/>
-            <img ref={imgRef} src="/img/main.png" alt=""/>
-          </div> :
-          <div css={prop.style}>
-            <Image layout='fill' objectFit='cover' src={mainSp} alt='' onLoadingComplete={() => {
-              setIsBackgroundLoaded(true)
-            }}/>
-          </div>
-      }
-    </>
-  )
+  return useMemo(() => {
+    return (
+      <>
+        {
+          !isMobile ?
+            <div css={prop.style}>
+              <div ref={mountRef}
+                   id='canvas'
+                   css={Canvas}
+                   data-grid="90"
+                   data-mouse="0.02"
+                   data-strength="0.0"/>
+            </div> :
+            <div css={prop.style}>
+              <Image layout='fill' objectFit='cover' src={mainSp} alt='' onLoadingComplete={() => {
+                setIsBackgroundLoaded(true)
+              }}/>
+            </div>
+        }
+      </>
+    )
+  }, [isMobile, prop.style, setIsBackgroundLoaded])
 })
 
 BackgroundCanvas.displayName = "BackgroundCanvas"

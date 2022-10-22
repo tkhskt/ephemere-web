@@ -12,7 +12,7 @@ export default class Sketch {
     this.scene = new THREE.Scene();
 
     this.container = options.dom;
-    this.img = options.img
+    this.objTexture = options.texture
     this.width = this.container.offsetWidth;
     this.height = this.container.offsetHeight;
     this.renderer = new THREE.WebGLRenderer();
@@ -167,7 +167,7 @@ export default class Sketch {
   addObjects() {
 
     this.regenerateGrid()
-    let texture = new THREE.Texture(this.img)
+    let texture = this.objTexture;
     texture.needsUpdate = true;
     this.material = new THREE.ShaderMaterial({
       extensions: {
