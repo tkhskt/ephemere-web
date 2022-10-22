@@ -192,14 +192,23 @@ const SectionLyricsModal = memo((prop: LyricsModalTemplateProps) => {
     <section>
       <div css={Section}>
         <div css={BackgroundImage(isImageLoaded)}>
-          <Image
-            layout='fill'
-            objectFit='cover'
-            src={pageState.isMobile ? disc.imageSp : disc.imagePc}
-            alt=''
-            priority={true}
-            onLoadingComplete={() => setIsImageLoaded(true)}
-          />
+          {pageState.isMobile ?
+            <Image
+              layout='fill'
+              objectFit='cover'
+              src={disc.imageSp}
+              alt=''
+              priority={true}
+              onLoadingComplete={() => setIsImageLoaded(true)}
+            /> : <Image
+              layout='fill'
+              objectFit='cover'
+              src={disc.imageSp}
+              alt=''
+              priority={true}
+              onLoadingComplete={() => setIsImageLoaded(true)}
+            />
+          }
         </div>
         <CloseButton style={CloseButtonStyle}/>
         <div css={LeftWrapper}>
