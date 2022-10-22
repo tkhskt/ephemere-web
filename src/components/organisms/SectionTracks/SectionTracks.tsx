@@ -6,6 +6,7 @@ import {css, keyframes} from "@emotion/react";
 import {clh, clw} from "util/size";
 import {InView} from "react-intersection-observer";
 import {memo} from "react";
+import {sp} from "styles/mediaQuert";
 
 const Section = css`
   display: flex;
@@ -13,6 +14,14 @@ const Section = css`
   align-items: center;
   min-height: 100vh;
   padding: ${clh(250)} 0 0 0;
+
+  ${
+    sp(css`
+      font-size: 16px;
+      left: 0;
+      padding: 0;
+    `)
+  }
 `
 
 const Container = css`
@@ -22,6 +31,14 @@ const Container = css`
   padding: ${clw(48)} 0;
   width: 100%;
   max-width: ${clw(1754)};
+ overflow: visible;
+  ${
+    sp(css`
+      flex-direction: column;
+      max-width: none;
+      padding: 64px 0;
+    `)
+  }
 `
 
 const BlueBackground = (inView: boolean) => {
@@ -41,9 +58,14 @@ const BlueBackground = (inView: boolean) => {
     max-width: ${clw(1309)};
     height: 0;
     ${inView && css`animation: ${animation} 1s cubic-bezier(0.5, 0, 0, 1) forwards `}
+
+    ${
+      sp(css`
+        display: none;
+      `)
+    }
   `
 }
-
 
 const BlueBackgroundBottom = (inView: boolean) => {
   const animation = keyframes`
@@ -64,6 +86,11 @@ const BlueBackgroundBottom = (inView: boolean) => {
     height: ${clw(200)};
     ${
       inView && css`animation: ${animation} 1.5s cubic-bezier(0.5, 0, 0, 1) forwards`
+    }
+    ${
+      sp(css`
+        display: none;
+      `)
     }
   `
 }
@@ -88,6 +115,11 @@ const GreenBackground = (inView: boolean) => {
     ${
       inView && css`animation: ${animation} 1.5s cubic-bezier(0.5, 0, 0, 1) forwards`
     }
+    ${
+      sp(css`
+        display: none;
+      `)
+    }
   `
 }
 
@@ -100,6 +132,11 @@ const TrackLinePcStyle = (inView: boolean) => {
     pointer-events: none;
     transition: opacity 2.5s ease;
     ${inView && css`opacity: 1`}
+    ${
+      sp(css`
+        display: none;
+      `)
+    }
   `
 }
 
@@ -120,6 +157,11 @@ const CardWrapper = (inView: boolean) => {
     ${inView && css`
       animation: ${animation} 0.5s ease forwards;
     `}
+    ${
+      sp(css`
+        width: 100%;
+      `)
+    }
   `
 }
 
@@ -131,6 +173,12 @@ const TrackCardStyle = css`
 const Disc2TrackCardStyle = css`
   margin-top: ${clw(162)};
   ${TrackCardStyle};
+
+  ${
+    sp(css`
+      margin-top: 48px;
+      `)
+  }
 `
 
 const SectionTracks = memo(() => {

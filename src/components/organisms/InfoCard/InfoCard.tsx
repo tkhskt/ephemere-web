@@ -2,6 +2,7 @@ import {css} from "@emotion/react";
 import {Colors} from "styles/theme";
 import {clw, font} from "util/size";
 import {Adobe} from "styles/font";
+import {sp} from "styles/mediaQuert";
 
 const Card = css`
   display: inline-flex;
@@ -9,14 +10,23 @@ const Card = css`
   flex-direction: column;
   background: ${Colors.Black};
   padding: ${clw(42)} ${clw(64)};
-  //width: ${clw(877)};
   width: 100%;
   height: ${clw(527)};
   justify-content: flex-end;
+  ${
+    sp(css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: auto;
+      padding: 174px 24px 52px;
+      font-size: 14px;
+    `)
+  }
 `
 
 const Title = css`
-  font-size: ${font(24)};
+  font-size: 24px;
   letter-spacing: 0.064em;
   padding-bottom: ${clw(20)};
   ${Adobe}
@@ -24,10 +34,21 @@ const Title = css`
 
 const TableWrapper = css`
   line-height: 2.75em;
+  ${
+    sp(css`
+      width: 100%;
+      max-width: 400px;
+    `)
+  }
 `
 
 const InfoValue = css`
   padding-left: ${clw(20)};
+  ${
+    sp(css`
+      padding-left: 15px;
+    `)
+  }
 `
 
 

@@ -4,9 +4,16 @@ import {clw, font} from "util/size";
 import {useHover} from "hooks/hover";
 import {HoveredElement, useMouseStalkerContext} from "contexts/MouseStalkerContext/context";
 import {memo, useEffect, useLayoutEffect} from "react";
+import {sp} from "styles/mediaQuert";
 
 const CreditsName = css`
   padding-left: ${clw(20)};
+  ${
+    sp(css`
+      padding-left: 15px;
+      line-height: 1.2em;
+    `)
+  }
 `
 
 const Link = css`
@@ -25,6 +32,7 @@ const LinkStroke = css`
   bottom: 0;
   background: ${Colors.White};
   transition: width 0.2s ease;
+  will-change: width;
 `
 
 const LinkStrokeHover = css`

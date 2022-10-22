@@ -4,12 +4,16 @@ import {clw} from "util/size";
 import {useHover} from "hooks/hover";
 import {Colors} from "styles/theme";
 import {memo, useLayoutEffect} from "react";
-import {HoveredElement, useMouseStalkerContext} from "contexts/MouseStalkerContext/context";
+import {sp} from "styles/mediaQuert";
 
 interface TrackListItemProps {
   number: number
   track: Track,
-  onClickTrack: (track: Track) => void
+  color: string,
+  onClickTrack: (track: Track) => void,
+  onHoverTrack: () => void,
+  onHoverLink: () => void,
+  onHoverOthers: () => void,
 }
 
 const TrackItem = css`
@@ -18,19 +22,61 @@ const TrackItem = css`
 
 const TrackNumber = css`
   text-align: right;
+  ${
+    sp(css`
+      font-size: 14px;
+      padding-top: 15px;
+    `)
+  }
 `
 
 const TrackName = css`
+  position: relative;
   padding-left: ${clw(8)};
-  //overflow: hidden;
+  ${
+    sp(css`
+      font-size: 14px;
+      padding-top: 15px;
+
+      &:after {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+        content: '';
+        background: linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(235, 235, 235, 0.15), rgba(235, 235, 235, 0.05));
+      }
+    `)
+  }
 `
 
 const Artist = css`
   padding-left: ${clw(24)};
+  ${
+    sp(css`
+      padding-top: 15px;
+    `)
+  }
 `
 
 const ArtistLink = css`
   position: relative;
+  ${
+    sp(css`
+      font-size: 12px;
+      white-space: nowrap;
+
+      &:after {
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        content: '';
+        background: ${Colors.White};
+      }
+    `)
+  }
 `
 
 const FeaturedArtistLink = css`
@@ -58,6 +104,12 @@ const Stroke = css`
   width: 100%;
   opacity: 0;
   transition: opacity 0.3s ease;
+  will-change: opacity;
+  ${
+    sp(css`
+      display: none;
+    `)
+  }
 `
 
 const StrokeHover = css`
@@ -74,6 +126,11 @@ const ArtistStroke = css`
   background: ${Colors.White};
   transition: width 0.2s ease;
   will-change: width;
+  ${
+    sp(css`
+      display: none;
+    `)
+  }
 `
 
 const ArtistStrokeHover = css`
@@ -85,8 +142,27 @@ const Clickable = css`
   cursor: pointer;
 `
 
+const LyricsSp = css`
+  display: none;
+  padding-left: 15px;
+  padding-top: 15px;
+  ${
+    sp(css`
+      display: table-cell;
+      font-size: 10px;
+    `)
+  }
+`
+
+const LyricsSpText = css`
+  border: solid 1px;
+  border-radius: 25px;
+  line-height: 1em;
+  padding: 6px 8px;
+`
+
 const TrackListItem = memo((prop: TrackListItemProps) => {
-  const {number, track, onClickTrack} = prop
+  const {number, track, color, onClickTrack, onHoverTrack, onHoverLink, onHoverOthers} = prop
 
   const [trackHoverRef, isHover] = useHover()
 
@@ -96,15 +172,13 @@ const TrackListItem = memo((prop: TrackListItemProps) => {
 
   const [artistHoverRef, isHoverArtist] = useHover()
 
-  const {setIsHoverOn} = useMouseStalkerContext()
-
   useLayoutEffect(() => {
     if ((isHover || isHoverStroke) && !isHoverFeaturedArtist && track.lyrics) {
-      setIsHoverOn(HoveredElement.Track)
+      onHoverTrack()
     } else if (isHoverArtist || isHoverFeaturedArtist) {
-      setIsHoverOn(HoveredElement.Link)
+      onHoverLink()
     } else {
-      setIsHoverOn(HoveredElement.Others)
+      onHoverOthers()
     }
   }, [
     artistHoverRef,
@@ -128,11 +202,17 @@ const TrackListItem = memo((prop: TrackListItemProps) => {
           align-items: center;
           padding: .4em 0;
         `}>
-          <div ref={trackHoverRef}><p onClick={() => onClickTrack(track)}
-                                      css={[css`display: inline; cursor: default`, track.lyrics && Clickable]}>{track.name}</p>
+          <div ref={trackHoverRef}><p onClick={
+            () => {
+              if (window.innerWidth > 1024) {
+                onClickTrack(track)
+              }
+            }
+          } css={[css`display: inline;
+            cursor: default`, track.lyrics && Clickable]}>{track.name}</p>
             {
               track.featuredArtist &&
-              <p css={css`display: inline`}><span onClick={() => onClickTrack(track)}
+              <p css={css`display: inline`}><span onClick={() => onClickTrack}
                                                   css={track.lyrics && Clickable}> feat. </span>
                 <a css={FeaturedArtistLink} ref={featuredArtistRef} href={track.featuredArtist.url}
                    target='_blank'
@@ -140,7 +220,7 @@ const TrackListItem = memo((prop: TrackListItemProps) => {
                   css={[ArtistStroke, isHoverFeaturedArtist && ArtistStrokeHover]}/></a></p>
             }
           </div>
-          <div ref={strokeHoverRef} onClick={() => onClickTrack(track)}
+          <div ref={strokeHoverRef} onClick={() => onClickTrack}
                css={[StrokeContainer, track.lyrics && Clickable]}><span
             css={[Stroke, ((isHover || isHoverStroke) && !isHoverFeaturedArtist) && StrokeHover]}/>
           </div>
@@ -149,6 +229,10 @@ const TrackListItem = memo((prop: TrackListItemProps) => {
       <td css={Artist}><a css={ArtistLink} ref={artistHoverRef} href={track.artist.url} target='_blank'
                           rel="noreferrer">{track.artist.name} <span
         css={[ArtistStroke, isHoverArtist && ArtistStrokeHover]}/></a></td>
+      {track.lyrics &&
+        <td css={LyricsSp}><p onClick={() => onClickTrack}
+                              css={[LyricsSpText, css`border-color: ${color}`]}>Lyrics</p></td>
+      }
     </tr>
   )
 })

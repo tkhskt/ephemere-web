@@ -1,4 +1,4 @@
-import React, {useContext, useReducer} from "react";
+import React, {createContext, Dispatch, SetStateAction, useContext, useReducer} from "react";
 import {disc1} from "contexts/TrackContext/tracks";
 
 export const SET_IS_OPENED = 'SET_IS_OPENED'
@@ -77,6 +77,10 @@ export const ModalContext = React.createContext<ModalContextType>({
 
 export const useModalContext = (): ModalContextType =>
   useContext<ModalContextType>(ModalContext)
+
+const setModalStateContext = createContext<Dispatch<ModalContextType>>(
+  () => undefined
+);
 
 interface ModalContextProviderProps {
   children?: React.ReactNode

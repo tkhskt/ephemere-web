@@ -2,10 +2,12 @@ import {useMousePosition} from "hooks/mousePosition";
 import {css} from "@emotion/react";
 import {Colors} from "styles/theme";
 import {ZIndex} from "values";
-import {memo, useEffect, useLayoutEffect, useRef, useState} from "react";
+import {memo, useLayoutEffect, useRef} from "react";
 import gsap from "gsap";
 import {HoveredElement, useMouseStalkerContext} from "contexts/MouseStalkerContext/context";
 import {Canto} from "styles/font";
+import {sp} from "styles/mediaQuert";
+import {useIsMobile} from "hooks/isMobile";
 
 const MouseWrapper = css`
   width: 0;
@@ -13,6 +15,11 @@ const MouseWrapper = css`
   position: fixed;
   z-index: ${ZIndex.MouseStalker};
   pointer-events: none;
+  ${
+    sp(css`
+      display: none;
+    `)
+  }
 `
 
 const Mouse = css`
@@ -29,7 +36,7 @@ const Mouse = css`
   background: ${Colors.White};
   border-radius: 50% 50%;
   font-size: 20px;
-  will-change: transform, width, height;
+  will-change: transform, width, height, border, background;
 `
 
 const Text = css`
@@ -42,11 +49,6 @@ const Text = css`
   ${Canto}
 `
 
-type Position = {
-  x: number,
-  y: number,
-}
-
 const MouseStalker = memo(() => {
 
     const position = useMousePosition();
@@ -56,7 +58,10 @@ const MouseStalker = memo(() => {
 
     const {mouseStalkerState} = useMouseStalkerContext();
 
+    const isMobile = useIsMobile()
+
     useLayoutEffect(() => {
+      if (isMobile) return
       gsap.context(() => {
         gsap.timeline().to(cursorRef.current, {
           duration: 0.2,
@@ -64,10 +69,10 @@ const MouseStalker = memo(() => {
         })
 
       }, [cursorRef]);// <- Scope!
-    }, [position, cursorRef]);
-
+    }, [position, cursorRef, isMobile]);
 
     useLayoutEffect(() => {
+      if (isMobile) return
       gsap.context(() => {
         const hoveredElement = mouseStalkerState.hoveredElement
         gsap.killTweensOf(textRef.current)
@@ -156,15 +161,17 @@ const MouseStalker = memo(() => {
         }
       }, [cursorRef, textRef])
 
-    }, [mouseStalkerState, cursorRef, textRef]);
+    }, [mouseStalkerState, cursorRef, textRef, isMobile]);
 
     return (
-      <div css={MouseWrapper}>
-        <div ref={cursorRef} className="cursor" css={Mouse}>
+      <>{!isMobile &&
+        <div css={MouseWrapper}>
+          <div ref={cursorRef} className="cursor" css={Mouse}>
           <span ref={textRef}
                 css={Text}> {mouseStalkerState.hoveredElement == HoveredElement.Track ? "Lyrics" : "Scroll"}</span>
-        </div>
-      </div>
+          </div>
+        </div>}
+      </>
     )
   }
 )

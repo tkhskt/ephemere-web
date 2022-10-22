@@ -3,10 +3,10 @@ import {Colors} from "styles/theme";
 import {clw, font} from "util/size";
 import {Adobe} from "styles/font";
 import {credits} from "values";
-import {useHover} from "hooks/hover";
 import {HoveredElement, useMouseStalkerContext} from "contexts/MouseStalkerContext/context";
-import {memo, useCallback, useEffect, useLayoutEffect} from "react";
+import {memo, useCallback} from "react";
 import CreditListItem from "components/molecules/CreditListItem";
+import {sp} from "styles/mediaQuert";
 
 const Card = css`
   display: inline-flex;
@@ -14,10 +14,19 @@ const Card = css`
   flex-direction: column;
   background: ${Colors.Navy};
   padding: ${clw(42)} ${clw(64)};
-    //width: ${clw(1129)};
   height: ${clw(550)};
   width: 100%;
   justify-content: flex-end;
+  ${
+    sp(css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: auto;
+      padding: 196px 24px 52px;
+      font-size: 14px;
+    `)
+  }
 `
 
 const Title = css`
@@ -35,6 +44,13 @@ const TableWrapper = css`
   align-items: flex-end;
   margin-top: ${clw(20)};
   line-height: 2.75em;
+  ${
+    sp(css`
+      width: 100%;
+      max-width: 400px;
+      align-items: flex-start;
+    `)
+  }
 `
 
 const CreditsCard = memo(() => {
@@ -42,7 +58,7 @@ const CreditsCard = memo(() => {
   const {setIsHoverOn} = useMouseStalkerContext()
 
   const onHover = useCallback((isHover: boolean) => {
-    if(isHover) {
+    if (isHover) {
       setIsHoverOn(HoveredElement.Link)
     } else {
       setIsHoverOn(HoveredElement.Others)

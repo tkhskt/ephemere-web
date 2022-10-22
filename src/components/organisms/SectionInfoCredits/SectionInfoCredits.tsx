@@ -4,14 +4,19 @@ import {css, keyframes} from "@emotion/react";
 import {clh, clw} from "util/size";
 import InfoLinePc from 'assets/svg/info_line_pc.svg'
 import {InView} from "react-intersection-observer";
-import TracksCard from "components/organisms/TracksCard";
-import {Colors} from "styles/theme";
-import TrackLinePc from "assets/svg/track_line_pc.svg";
 import {memo} from "react";
+import {sp} from "styles/mediaQuert";
 
 const Section = css`
   min-height: 100vh;
   padding: ${clh(250)} 0 ${clh(100)};
+  ${
+    sp(css`
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    `)
+  }
 `
 
 const Container = css`
@@ -19,8 +24,15 @@ const Container = css`
   width: 100%;
   height: ${clw(718)};
   max-width: ${clw(1452)};
-
   margin: 0 auto;
+  ${
+    sp(css`
+      display: flex;
+      flex-direction: column;
+      padding: 87px 0 100px;
+      height: auto;
+    `)
+  }
 `
 
 const InfoCardWrapper = (inView: boolean) => {
@@ -44,6 +56,15 @@ const InfoCardWrapper = (inView: boolean) => {
     ${inView && css`
       animation: ${animation} 0.5s ease forwards;
     `}
+    ${
+      sp(
+        css`
+          position: relative;
+          top: auto;
+          left: auto;
+          width: 100%;
+        `)
+    }
   `
 }
 
@@ -67,6 +88,16 @@ const CreditsCardWrapper = (inView: boolean) => {
     ${inView && css`
       animation: ${animation} 0.5s ease forwards;
     `}
+    ${
+      sp(
+        css`
+          position: relative;
+          top: auto;
+          left: auto;
+          width: 100%;
+          margin-top: 48px;
+        `)
+    }
   `
 }
 
@@ -81,6 +112,11 @@ const InfoLinePcStyle = (inView: boolean) => {
     opacity: 0;
     transition: opacity 2.5s ease;
     ${inView && css`opacity: 1`}
+    ${
+      sp(css`
+        display: none;
+      `)
+    }
   `
 }
 

@@ -9,6 +9,8 @@ import CloseButton from "components/atoms/CloseButton";
 import Image from "next/image";
 import {useRef, useState} from "react";
 import {useScrollLock} from "hooks/scrollLock";
+import {sp} from "styles/mediaQuert";
+import ModalTrackTitle from "components/atoms/ModalTrackTitle";
 
 export const Disc = {
   Disc1: {
@@ -37,6 +39,12 @@ const Section = css`
   padding: 0 ${clw(119)};
   background: ${Colors.Black};
   ${Serif}
+  ${
+    sp(css`
+      display: block;
+      padding: 0;
+    `)
+  }
 `
 
 const BackgroundImage = (isLoaded: boolean) => {
@@ -68,6 +76,12 @@ const CloseButtonStyle = css`
   right: ${clw(60)};
   top: ${clw(60)};
   z-index: 5;
+  ${
+    sp(css`
+      right: 24px;
+      top: 24px;
+    `)
+  }
 `
 
 const TrackNameContainer = css`
@@ -81,26 +95,17 @@ const TrackNameContainer = css`
   z-index: 1;
 `
 
-const TrackName = css`
-  position: relative;
-  font-size: ${font(36)};
-  line-height: 1em;
-  z-index: 2;
-`
-
-const ArtistName = css`
-  font-size: ${font(14)};
-  line-height: 1em;
-  text-align: right;
-  margin-top: ${clw(8)};
-`
-
 const LeftWrapper = css`
   position: absolute;
   display: flex;
   width: 100%;
   height: 100%;
   z-index: 1;
+  ${
+    sp(css`
+      display: none;
+    `)
+  }
 `
 
 const RightWrapper = css`
@@ -131,6 +136,12 @@ const LyricsContainer = css`
   &::-webkit-scrollbar {
     display: none;
   }
+
+  ${
+    sp(css`
+      display: block;
+    `)
+  }
 `
 
 const LyricsWrapper = css`
@@ -141,22 +152,29 @@ const Lyrics = css`
   display: flex;
   justify-content: center;
   padding: ${clw(130)} 0;
+  ${
+    sp(css`
+      width: 100%;
+      max-width: 350px;
+      margin: 56px auto 0;
+      padding: 0 0 100px;
+      justify-content: flex-start;
+    `)
+  }
 `
 
-const TitleBackground = css`
-  position: absolute;
-  width: 90%;
-  height: 40%;
-  left: calc(${clw(20)} + 10%);
-  bottom: -10%;
+const TrackNameWrapperSp = css`
+  display: none;
+  ${
+    sp(css`
+      display: inline;
+    `)
+  }
 `
+
 
 const SectionLyricsModal = (prop: LyricsModalTemplateProps) => {
   const {disc, track} = prop
-
-  const titleBackgroundColor = css`
-    background: ${disc.color}
-  `
 
   const [isImageLoaded, setIsImageLoaded] = useState(false)
 
@@ -173,14 +191,7 @@ const SectionLyricsModal = (prop: LyricsModalTemplateProps) => {
         <CloseButton style={CloseButtonStyle}/>
         <div css={LeftWrapper}>
           <div css={TrackNameContainer}>
-            <div css={css`display: inline`}>
-              <div css={css`position: relative`}>
-                <p css={TrackName}>{track.name} {track.featuredArtist && `feat. ${track.featuredArtist.name}`}</p>
-                <span
-                  css={[TitleBackground, titleBackgroundColor]}/>
-              </div>
-              <p css={ArtistName}>by {track.artist.name}</p>
-            </div>
+            <ModalTrackTitle track={track} titleColor={disc.color}/>
           </div>
         </div>
         <div css={RightWrapper}>
@@ -188,6 +199,16 @@ const SectionLyricsModal = (prop: LyricsModalTemplateProps) => {
             <div css={css`width: 50%;
               z-index: -1`}/>
             <div css={LyricsWrapper}>
+              <div css={TrackNameWrapperSp}>
+                <div css={css`
+                  justify-content: flex-start;
+                  max-width: 350px;
+                  margin: 0 auto;
+                  padding-top: 150px;`
+                }>
+                  <ModalTrackTitle track={track} titleColor={disc.color}/>
+                </div>
+              </div>
               <p css={Lyrics}>{track.lyrics}</p>
             </div>
           </div>

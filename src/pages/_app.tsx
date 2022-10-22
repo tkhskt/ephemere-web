@@ -10,6 +10,7 @@ import Head from "next/head";
 import {clw} from "util/size";
 import {MouseStalkerContextProvider} from "contexts/MouseStalkerContext";
 import {PageContextProvider} from "contexts/PageContext";
+import {sp} from "styles/mediaQuert";
 
 function MyApp({Component, pageProps}: AppProps) {
   return (
@@ -18,7 +19,7 @@ function MyApp({Component, pageProps}: AppProps) {
         <script dangerouslySetInnerHTML={{
           __html: LoadScript
         }}/>
-        <title>ephemere</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
       </Head>
       <Global
         styles={css`
@@ -32,6 +33,11 @@ function MyApp({Component, pageProps}: AppProps) {
             -webkit-font-smoothing: antialiased;
             box-sizing: border-box;
             ${Mincho}
+            ${
+              sp(css`
+                font-size: 16px;
+              `)
+            }
           }
         `}
       />

@@ -4,6 +4,8 @@ import {css, SerializedStyles} from "@emotion/react";
 import {Colors} from "styles/theme";
 import {Adobe} from "styles/font";
 import {clw} from "util/size";
+import {sp} from "styles/mediaQuert";
+import {spWidth} from "values";
 
 interface TracksCardProps {
   title: string
@@ -19,11 +21,27 @@ const Card = css`
   padding: ${clw(42)} ${clw(64)};
     // width: ${clw(877)};
   width: 100%;
+
+  ${
+    sp(css`
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: ${clw(39, spWidth)} ${clw(24, spWidth)};
+    `)
+  }
 `
 
 const TitleContainer = css`
   position: relative;
   display: inline-block;
+  ${
+    sp(css`
+      align-self: flex-start;
+      max-width: 400px;
+    `)
+  }
 `
 
 const TitleStyle = css`
@@ -34,10 +52,21 @@ const TitleStyle = css`
   line-height: 1em;
   letter-spacing: 0.064em;
   ${Adobe}
+  ${
+    sp(css`
+      font-size: 1.125em;
+    `)
+  }
 `
 
 const TrackListStyle = css`
   margin-top: ${clw(65)};
+  ${
+    sp(css`
+      max-width: 400px;
+      margin-top: 47px;
+    `)
+  }
 `
 
 const TracksCard = (props: TracksCardProps) => {
@@ -56,10 +85,12 @@ const TracksCard = (props: TracksCardProps) => {
   return (
     <div css={[Card, style]}>
       <div css={TitleContainer}>
-        <p css={TitleStyle}>{title}</p>
-        <span css={TitleBackground}/>
+        <div>
+          <p css={TitleStyle}>{title}</p>
+          <span css={TitleBackground}/>
+        </div>
       </div>
-      <TrackList tracks={tracks} style={TrackListStyle}/>
+      <TrackList tracks={tracks} color={color} style={TrackListStyle}/>
     </div>
   )
 }
