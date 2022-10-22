@@ -28,6 +28,7 @@ const Container = css`
 
 const Text = css`
   user-select: none;
+  cursor: default;
   animation: ${keyframes`
     from {
       opacity: 0;

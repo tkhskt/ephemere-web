@@ -26,8 +26,10 @@ const Card = css`
 `
 
 const Title = css`
-  font-size: 24px;
+  width: 100%;
+  font-size: ${font(24)};
   letter-spacing: 0.064em;
+  text-align: left;
   padding-bottom: ${clw(20)};
   ${Adobe}
 `

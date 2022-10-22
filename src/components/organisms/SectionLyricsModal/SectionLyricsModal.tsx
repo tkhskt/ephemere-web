@@ -4,6 +4,8 @@ import {clw, font} from "util/size";
 import {Serif} from "styles/font";
 import disc1BgPc from '/public/img/modal_disc1_bg_pc.png'
 import disc2BgPc from '/public/img/modal_disc2_bg_pc.png'
+import disc1BgSp from '/public/img/modal_disc1_bg_sp.png'
+import disc2BgSp from '/public/img/modal_disc2_bg_sp.png'
 import {Colors} from "styles/theme";
 import CloseButton from "components/atoms/CloseButton";
 import Image from "next/image";
@@ -11,15 +13,18 @@ import {memo, useRef, useState} from "react";
 import {useScrollLock} from "hooks/scrollLock";
 import {sp} from "styles/mediaQuert";
 import ModalTrackTitle from "components/atoms/ModalTrackTitle";
+import {usePageContext} from "contexts/PageContext/context";
 
 export const Disc = {
   Disc1: {
     color: Colors.Blue,
     imagePc: disc1BgPc,
+    imageSp: disc1BgSp,
   },
   Disc2: {
     color: Colors.Yellow,
     imagePc: disc2BgPc,
+    imageSp: disc2BgSp,
   },
 } as const
 
@@ -178,6 +183,8 @@ const SectionLyricsModal = memo((prop: LyricsModalTemplateProps) => {
 
   const [isImageLoaded, setIsImageLoaded] = useState(false)
 
+  const {pageState} = usePageContext()
+
   const lyricRef = useRef(null)
   useScrollLock(lyricRef.current)
 
@@ -185,7 +192,7 @@ const SectionLyricsModal = memo((prop: LyricsModalTemplateProps) => {
     <section>
       <div css={Section}>
         <div css={BackgroundImage(isImageLoaded)}>
-          <Image layout='fill' objectFit='cover' src={disc.imagePc} alt=''
+          <Image layout='fill' objectFit='cover' src={pageState.isMobile ? disc.imageSp : disc.imagePc} alt=''
                  onLoadingComplete={() => setIsImageLoaded(true)}/>
         </div>
         <CloseButton style={CloseButtonStyle}/>
