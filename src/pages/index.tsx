@@ -4,7 +4,7 @@ import {IndexPageTemplate, SplashScreenTemplate} from "components/templates";
 import {usePageContext} from "contexts/PageContext/context";
 import {memo, useEffect, useLayoutEffect, useMemo} from "react";
 
-const description = "“éphémère”is a story of the delicate balance between happiness and sadness."
+const description = "“éphémère” is a story of the delicate balance between happiness and sadness."
 const url = "https://ephemere.blue"
 const title = "éphémère"
 const imageUrl = url + "/ogp.png"

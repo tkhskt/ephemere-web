@@ -34,7 +34,7 @@ export default class Sketch {
     const frustumSize = 1;
     const aspect = window.innerWidth / window.innerHeight;
     this.camera = new THREE.OrthographicCamera(frustumSize / -2, frustumSize / 2, frustumSize / 2, frustumSize / -2, -1000, 1000);
-    this.camera.position.set(0, 0, 2);
+    this.camera.position.set(0, 0, 3);
 
     this.time = 0;
 
@@ -104,7 +104,7 @@ export default class Sketch {
 
 
     // image cover
-    this.imageAspect = 1. / 1.5;
+    this.imageAspect = 1. / 1.77777777778;
     let a1;
     let a2;
     if (this.height / this.width > this.imageAspect) {

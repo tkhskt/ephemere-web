@@ -60,7 +60,7 @@ const SectionTop = memo(() => {
     return (
       <section ref={topRef}>
         <div css={TopContainer(vh)}>
-          <p css={Concept}>“éphémère”is a story of the delicate balance between happiness and sadness.</p>
+          <p css={Concept}>“éphémère” is a story of the delicate balance between happiness and sadness.</p>
         </div>
       </section>
     )
