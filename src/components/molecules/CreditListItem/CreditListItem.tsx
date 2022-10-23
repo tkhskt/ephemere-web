@@ -64,8 +64,8 @@ const CreditListItem = memo((prop: CreditListItemProps) => {
       <td css={CreditsName}>
         <p css={LinkWrapper}>{name}</p> {url &&
         <p css={[LinkWrapper, Link]}>
-          (<span css={css`display: inline-flex; overflow-x: hidden; line-height: 1em`}>
-            <a ref={linkHoverRef} css={css`position: relative`} href={url} target="_blank"
+          (<span css={css`display: inline-flex; overflow-x: hidden`}>
+            <a ref={linkHoverRef} css={css`position: relative; line-height: 1.2em`} href={url} target="_blank"
                rel="noreferrer">{linkText}
               <span css={[LinkStroke, isHoverLink && LinkStrokeHover]}/>
             </a>
