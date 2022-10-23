@@ -203,7 +203,7 @@ const SectionLyricsModal = memo((prop: LyricsModalTemplateProps) => {
             /> : <Image
               layout='fill'
               objectFit='cover'
-              src={disc.imageSp}
+              src={disc.imagePc}
               alt=''
               priority={true}
               onLoadingComplete={() => setIsImageLoaded(true)}

@@ -93,7 +93,7 @@ export default class Sketch {
   }
 
   setupResize() {
-    window.addEventListener("resize", this.resize.bind(this));
+    window.addEventListener("resize", this.debounce(this.resize.bind(this)).bind(this));
   }
 
   resize() {
@@ -122,8 +122,6 @@ export default class Sketch {
 
     this.camera.updateProjectionMatrix();
     this.regenerateGrid()
-
-
   }
 
   regenerateGrid() {
@@ -134,11 +132,6 @@ export default class Sketch {
 
     const size = width * height;
     const data = new Float32Array(3 * size);
-    const color = new THREE.Color(0xffffff);
-
-    const r = Math.floor(color.r * 255);
-    const g = Math.floor(color.g * 255);
-    const b = Math.floor(color.b * 255);
 
     for (let i = 0; i < size; i++) {
       let r = Math.random() * 255 - 125;
@@ -247,4 +240,16 @@ export default class Sketch {
     requestAnimationFrame(this.render.bind(this));
     this.renderer.render(this.scene, this.camera);
   }
+
+  debounce(func, wait = 100) {
+    let timerId;
+    return (...args) => {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+      timerId = setTimeout(() => {
+        func.apply(null, args);
+      }, wait);
+    };
+  };
 }

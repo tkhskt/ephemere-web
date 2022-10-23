@@ -1,5 +1,5 @@
 import {css, SerializedStyles} from "@emotion/react";
-import {memo, useLayoutEffect, useMemo, useRef} from "react";
+import {memo, useEffect, useLayoutEffect, useMemo, useRef} from "react";
 import Sketch from './sketch';
 import mainSp from '/public/img/main_sp.png';
 import {usePageContext} from "contexts/PageContext/context";
@@ -15,11 +15,8 @@ interface BackgroundCanvasProps {
 const Canvas = css`
   width: 100%;
   height: 100%;
-`
-
-const SpBackground = css`
-  width: 100%;
-  height: 100%;
+  transition: opacity 0.5s ease;
+  will-change: opacity;
 `
 
 async function supportsWebp() {
@@ -76,7 +73,32 @@ const BackgroundCanvas = memo((prop: BackgroundCanvasProps) => {
         elm?.removeChild(sketch.renderer.domElement)
       }
     }
-  }, [isMobile])
+  }, [isMobile, setIsBackgroundLoaded, mountRef])
+
+  useEffect(() => {
+    if (isMobile) return
+    let delay: NodeJS.Timeout | null = null;
+    const listener = () => {
+      const el = mountRef.current
+
+      if (el) {
+        if (delay != null) {
+          clearTimeout(delay);
+        }
+        el.style.opacity = '0'
+        delay = setTimeout(() => {
+          el.style.opacity = '1'
+        }, 900);
+      }
+    }
+
+    window.addEventListener("resize", listener)
+    return (
+      () => {
+        window.removeEventListener("resize", listener)
+      }
+    )
+  }, [mountRef, isMobile])
 
   return useMemo(() => {
     return (
