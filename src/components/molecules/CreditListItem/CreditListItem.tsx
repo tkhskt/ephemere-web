@@ -19,6 +19,19 @@ const Link = css`
   font-size: ${font(12)};
 `
 
+const NameImageWrapper = css`
+  display: inline-flex;
+  align-items: flex-end;
+`
+
+const NameImage = css`
+  display: inline-block;
+  height: ${clw(16)};
+  width: auto;
+  margin-right: 0.1em;
+  transform: translateY(1px);
+`
+
 const LinkWrapper = css`
   display: inline;
 `
@@ -50,12 +63,13 @@ interface CreditListItemProps {
   role: string
   url?: string
   linkText?: string
+  nameImageUrl?: string
   onHoverLink: (isHoverLink: boolean) => void
 }
 
 const CreditListItem = memo((prop: CreditListItemProps) => {
 
-  const {name, role, url, linkText, onHoverLink} = prop
+  const {name, role, url, linkText, nameImageUrl, onHoverLink} = prop
 
   const [linkHoverRef, isHoverLink] = useHover()
 
@@ -67,16 +81,23 @@ const CreditListItem = memo((prop: CreditListItemProps) => {
     <tr>
       <td><p css={css`white-space: nowrap`}>{role}</p></td>
       <td css={CreditsName}>
-        <p css={LinkWrapper}>{name}</p> {url &&
-        <p css={[LinkWrapper, Link]}>
-          (<span css={css`display: inline-flex; overflow-x: hidden`}>
-            <a ref={linkHoverRef} css={css`position: relative; line-height: 1.2em`} href={url} target="_blank"
+        {nameImageUrl ?
+          <div css={NameImageWrapper}>
+            <img css={NameImage} src={nameImageUrl} alt={name}/>
+          </div> : <p css={LinkWrapper}>{name}</p>
+        }
+        {url &&
+          <p css={[LinkWrapper, Link]}>
+            (<span css={css`display: inline-flex;
+            overflow-x: hidden`}>
+            <a ref={linkHoverRef} css={css`position: relative;
+              line-height: 1.2em`} href={url} target="_blank"
                rel="noreferrer">{linkText}
               <span css={[LinkStroke, isHoverLink && LinkStrokeHover]}/>
             </a>
           </span>)
-        </p>
-      }
+          </p>
+        }
       </td>
     </tr>
   )

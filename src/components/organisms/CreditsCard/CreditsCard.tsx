@@ -78,7 +78,7 @@ const CreditsCard = memo(() => {
           <tbody>
           {credits.map((credits, index) => (
             <CreditListItem name={credits.name} role={credits.role} url={credits.url} linkText={credits.linkText}
-                            key={index} onHoverLink={onHover}/>
+                            key={index} onHoverLink={onHover} nameImageUrl={credits.nameImageUrl}/>
           ))}
           </tbody>
         </table>

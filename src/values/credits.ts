@@ -3,6 +3,7 @@ type Credit = {
   name: string,
   linkText?: string,
   url?: string,
+  nameImageUrl?: string
 }
 
 export const credits: Credit[] = [
@@ -17,6 +18,7 @@ export const credits: Credit[] = [
     name: "🌫",
     linkText: "@cute_my_rabbit",
     url: "https://twitter.com/cute_my_rabbit",
+    nameImageUrl: "https://abs-0.twimg.com/emoji/v2/svg/1f32b.svg",
   },
   {
     role: "Disc 2 / Interior",
