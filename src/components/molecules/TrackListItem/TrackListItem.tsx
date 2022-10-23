@@ -52,6 +52,7 @@ const TrackName = css`
 
 const Artist = css`
   padding-left: ${clw(24)};
+  overflow-x: hidden;
   ${
     sp(css`
       padding-top: 15px;
@@ -81,6 +82,7 @@ const ArtistLink = css`
 
 const FeaturedArtistLink = css`
   position: relative;
+  line-height: 1em;
 `
 
 const StrokeContainer = css`
@@ -119,13 +121,14 @@ const StrokeHover = css`
 
 const ArtistStroke = css`
   position: absolute;
-  width: 0;
+  width: 100%;
   height: 1px;
   left: 0;
   bottom: 0;
   background: ${Colors.White};
-  transition: width 0.2s ease;
-  will-change: width;
+  transform: translate(-100%, 0);
+  transition: transform 0.2s ease;
+  will-change: transform;
   ${
     sp(css`
       display: none;
@@ -134,8 +137,8 @@ const ArtistStroke = css`
 `
 
 const ArtistStrokeHover = css`
-  width: 100%;
-  transition: width 0.2s ease;
+  transform: translate(0, 0);
+  transition: transform 0.2s ease;
 `
 
 const Clickable = css`
@@ -201,12 +204,16 @@ const TrackListItem = memo((prop: TrackListItemProps) => {
             cursor: default`, track.lyrics && Clickable]}>{track.name}</p>
             {
               track.featuredArtist &&
-              <p css={css`display: inline`}><span onClick={() => onClickTrack(track)}
-                                                  css={track.lyrics && Clickable}> feat. </span>
-                <a css={FeaturedArtistLink} ref={featuredArtistRef} href={track.featuredArtist.url}
-                   target='_blank'
-                   rel="noreferrer">{track.featuredArtist.name}<span
-                  css={[ArtistStroke, isHoverFeaturedArtist && ArtistStrokeHover]}/></a></p>
+              <p css={css`display: inline;`}><span onClick={() => onClickTrack(track)}
+                                           css={track.lyrics && Clickable}> feat. </span>
+                <span css={css`display: inline-flex; overflow-x: hidden`}>
+                  <a css={FeaturedArtistLink} ref={featuredArtistRef} href={track.featuredArtist.url}
+                     target='_blank'
+                     rel="noreferrer">{track.featuredArtist.name}
+                    <span css={[ArtistStroke, isHoverFeaturedArtist && ArtistStrokeHover]}/>
+                  </a>
+                </span>
+              </p>
             }
           </div>
           <div ref={strokeHoverRef} onClick={() => onClickTrack(track)}
@@ -215,9 +222,13 @@ const TrackListItem = memo((prop: TrackListItemProps) => {
           </div>
         </div>
       </td>
-      <td css={Artist}><a css={ArtistLink} ref={artistHoverRef} href={track.artist.url} target='_blank'
-                          rel="noreferrer">{track.artist.name} <span
-        css={[ArtistStroke, isHoverArtist && ArtistStrokeHover]}/></a></td>
+      <td css={Artist}>
+        <div css={css`overflow-x: hidden`}>
+          <a css={ArtistLink} ref={artistHoverRef} href={track.artist.url} target='_blank'
+             rel="noreferrer">{track.artist.name}<span
+            css={[ArtistStroke, isHoverArtist && ArtistStrokeHover]}/></a>
+        </div>
+      </td>
       {track.lyrics &&
         <td css={LyricsSp}><p onClick={() => onClickTrack(track)}
                               css={[LyricsSpText, css`border-color: ${color}`]}>Lyrics</p></td>

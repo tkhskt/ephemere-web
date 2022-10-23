@@ -2,8 +2,7 @@ import {css} from "@emotion/react";
 import {Colors} from "styles/theme";
 import {clw, font} from "util/size";
 import {useHover} from "hooks/hover";
-import {HoveredElement, useMouseStalkerContext} from "contexts/MouseStalkerContext/context";
-import {memo, useEffect, useLayoutEffect} from "react";
+import {memo, useLayoutEffect} from "react";
 import {sp} from "styles/mediaQuert";
 
 const CreditsName = css`
@@ -26,18 +25,19 @@ const LinkWrapper = css`
 
 const LinkStroke = css`
   position: absolute;
-  width: 0;
+  width: 100%;
   height: 1px;
   left: 0;
   bottom: 0;
+  transform: translate(-100%, 0);
   background: ${Colors.White};
-  transition: width 0.2s ease;
-  will-change: width;
+  transition: transform 0.2s ease;
+  will-change: transform;
 `
 
 const LinkStrokeHover = css`
-  width: 100%;
-  transition: width 0.2s ease;
+  transform: translate(0, 0);
+  transition: transform 0.2s ease;
 `
 
 interface CreditListItemProps {
@@ -64,8 +64,12 @@ const CreditListItem = memo((prop: CreditListItemProps) => {
       <td css={CreditsName}>
         <p css={LinkWrapper}>{name}</p> {url &&
         <p css={[LinkWrapper, Link]}>
-          (<a ref={linkHoverRef} css={css`position: relative`} href={url} target="_blank"
-              rel="noreferrer">{linkText}<span css={[LinkStroke, isHoverLink && LinkStrokeHover]}/></a>)
+          (<span css={css`display: inline-flex; overflow-x: hidden; line-height: 1em`}>
+            <a ref={linkHoverRef} css={css`position: relative`} href={url} target="_blank"
+               rel="noreferrer">{linkText}
+              <span css={[LinkStroke, isHoverLink && LinkStrokeHover]}/>
+            </a>
+          </span>)
         </p>
       }
       </td>
