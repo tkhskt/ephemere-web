@@ -245,14 +245,14 @@ const SectionTracks = memo(() => {
             <InView triggerOnce={true} delay={500}>
               {({inView, ref, entry}) => (
                 <div ref={ref} css={CardWrapper(inView)}>
-                  <TracksCard title={'Disc 1 (melancholy)'} color={Colors.Blue} tracks={disc1Tracks}/>
+                  <TracksCard title={'Disc 1 (melancholy)'} color={Colors.Yellow} tracks={disc1Tracks}/>
                 </div>
               )}
             </InView>
             <InView triggerOnce={true} delay={700}>
               {({inView, ref, entry}) => (
                 <div ref={ref} css={CardWrapper(inView)}>
-                  <TracksCard title={'Disc 2 (perseverance)'} color={Colors.Yellow} tracks={disc2Tracks}
+                  <TracksCard title={'Disc 2 (perseverance)'} color={Colors.Blue} tracks={disc2Tracks}
                               style={Disc2TrackCardStyle}/>
                 </div>
               )}

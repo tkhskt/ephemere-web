@@ -17,12 +17,12 @@ import {usePageContext} from "contexts/PageContext/context";
 
 export const Disc = {
   Disc1: {
-    color: Colors.Blue,
+    color: Colors.Yellow,
     imagePc: disc1BgPc,
     imageSp: disc1BgSp,
   },
   Disc2: {
-    color: Colors.Yellow,
+    color: Colors.Blue,
     imagePc: disc2BgPc,
     imageSp: disc2BgSp,
   },
@@ -229,7 +229,7 @@ const SectionLyricsModal = memo((prop: LyricsModalTemplateProps) => {
                   margin: 0 auto;
                   padding-top: 150px;
                   overflow: hidden;
-                  `
+                `
                 }>
                   <ModalTrackTitle track={track} titleColor={disc.color}/>
                 </div>
