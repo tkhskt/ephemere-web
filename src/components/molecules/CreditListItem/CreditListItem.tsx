@@ -29,7 +29,7 @@ const LinkStroke = css`
   height: 1px;
   left: 0;
   bottom: 0;
-  transform: translate(-100%, 0);
+  transform: translate(-100%, -1px);
   background: ${Colors.White};
   transition: transform 0.2s ease;
   will-change: transform;
@@ -41,7 +41,7 @@ const LinkStroke = css`
 `
 
 const LinkStrokeHover = css`
-  transform: translate(0, 0);
+  transform: translate(0, -1px);
   transition: transform 0.2s ease;
 `
 
