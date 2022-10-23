@@ -8,6 +8,12 @@ type Credit = {
 
 export const credits: Credit[] = [
   {
+    role: "Produce",
+    name: "zohryu",
+    linkText: "@zohryu",
+    url: "https://twitter.com/zohryu",
+  },
+  {
     role: "Cover / Back",
     name: "塚本穴骨",
     linkText: "@DOnut_bone",

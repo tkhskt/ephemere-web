@@ -14,7 +14,7 @@ const Card = css`
   flex-direction: column;
   background: ${Colors.Navy};
   padding: ${clw(42)} ${clw(64)};
-  height: ${clw(550)};
+  height: ${clw(650)};
   width: 100%;
   justify-content: flex-end;
   ${

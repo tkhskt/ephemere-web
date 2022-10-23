@@ -85,8 +85,7 @@ const CreditListItem = memo((prop: CreditListItemProps) => {
           <div css={NameImageWrapper}>
             <img css={NameImage} src={nameImageUrl} alt={name}/>
           </div> : <p css={LinkWrapper}>{name}</p>
-        }
-        {url &&
+        } {url &&
           <p css={[LinkWrapper, Link]}>
             (<span css={css`display: inline-flex;
             overflow-x: hidden`}>
