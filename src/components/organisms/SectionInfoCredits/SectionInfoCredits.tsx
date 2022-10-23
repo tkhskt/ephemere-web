@@ -145,6 +145,7 @@ const CreditsLineSpStyle = css`
   position: absolute;
   display: none;
   overflow: hidden;
+  pointer-events: none;
   ${
     sp(css`
       top: 0;

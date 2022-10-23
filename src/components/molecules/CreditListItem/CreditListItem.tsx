@@ -33,6 +33,11 @@ const LinkStroke = css`
   background: ${Colors.White};
   transition: transform 0.2s ease;
   will-change: transform;
+  ${
+    sp(css`
+      display: none;
+    `)
+  }
 `
 
 const LinkStrokeHover = css`
