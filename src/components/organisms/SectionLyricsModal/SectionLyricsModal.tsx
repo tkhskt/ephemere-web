@@ -225,8 +225,11 @@ const SectionLyricsModal = memo((prop: LyricsModalTemplateProps) => {
                 <div css={css`
                   justify-content: flex-start;
                   max-width: 350px;
+                  width: 100%;
                   margin: 0 auto;
-                  padding-top: 150px;`
+                  padding-top: 150px;
+                  overflow: hidden;
+                  `
                 }>
                   <ModalTrackTitle track={track} titleColor={disc.color}/>
                 </div>

@@ -138,6 +138,7 @@ export const disc1: Track[] = [
     name: 'Ghost Restaurant',
     artist: {
       name: 'Pedestrian',
+      url: 'https://twitter.com/tri_angl_e',
     },
     featuredArtist: {
       name: '初音ミク',

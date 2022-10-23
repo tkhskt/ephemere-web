@@ -3,6 +3,8 @@ import CreditsCard from "components/organisms/CreditsCard";
 import {css, keyframes} from "@emotion/react";
 import {clh, clw} from "util/size";
 import InfoLinePc from 'assets/svg/info_line_pc.svg'
+import InfoLineSp from 'assets/svg/info_line_sp.svg'
+import CreditsLineSp from 'assets/svg/credits_line_sp.svg'
 import {InView} from "react-intersection-observer";
 import {memo, useLayoutEffect, useMemo, useRef} from "react";
 import {sp} from "styles/mediaQuert";
@@ -122,6 +124,40 @@ const InfoLinePcStyle = (inView: boolean) => {
   `
 }
 
+const InfoLineSpStyle = css`
+  position: absolute;
+  display: none;
+  overflow: hidden;
+  ${
+    sp(css`
+      top: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      padding: 20px 0;
+    `)
+  }
+`
+
+const CreditsLineSpStyle = css`
+  position: absolute;
+  display: none;
+  overflow: hidden;
+  ${
+    sp(css`
+      top: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      padding: 20px 0;
+    `)
+  }
+`
+
 const SectionInfoCredits = memo(() => {
   const sectionRef = useRef(null)
 
@@ -165,6 +201,9 @@ const SectionInfoCredits = memo(() => {
               {({inView, ref, entry}) => (
                 <div ref={ref} css={InfoCardWrapper(inView)}>
                   <InfoCard/>
+                  <div css={InfoLineSpStyle}>
+                    <InfoLineSp css={css`max-width: 100%; max-height: 100%`}/>
+                  </div>
                 </div>
               )}
             </InView>
@@ -172,6 +211,9 @@ const SectionInfoCredits = memo(() => {
               {({inView, ref, entry}) => (
                 <div ref={ref} css={CreditsCardWrapper(inView)}>
                   <CreditsCard/>
+                  <div css={CreditsLineSpStyle}>
+                    <CreditsLineSp css={css`max-width: 100%; max-height: 100%`}/>
+                  </div>
                 </div>
               )}
             </InView>
